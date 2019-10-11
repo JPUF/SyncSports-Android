@@ -8,5 +8,9 @@
         <action android:id="@+id/action_homeFragment_to_syncFragment" app:destination="@id/syncFragment"/>
     </fragment>
     <fragment android:id="@+id/syncFragment" android:name="com.jlbennett.syncsports.SyncFragment"
-              android:label="SyncFragment"/>
+              android:label="SyncFragment">
+        <action android:id="@+id/action_syncFragment_to_chatFragment" app:destination="@id/chatFragment"/>
+    </fragment>
+    <fragment android:id="@+id/chatFragment" android:name="com.jlbennett.syncsports.ChatFragment"
+              android:label="ChatFragment"/>
 </navigation>

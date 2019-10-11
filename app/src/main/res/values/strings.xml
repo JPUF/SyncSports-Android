@@ -7,4 +7,5 @@
     <string name="popular_rooms">Popular Rooms</string>
     <string name="create_room">Create Room</string>
     <string name="match_time_on_your_stream">Match time on your stream</string>
+    <string name="chat">Chat!</string>
 </resources>
