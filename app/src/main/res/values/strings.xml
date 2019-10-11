@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SyncSports</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+    <string name="popular_rooms">Popular Rooms</string>
+    <string name="create_room">Create Room</string>
+</resources>
