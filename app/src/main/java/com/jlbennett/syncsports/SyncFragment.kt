@@ -7,23 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
-import com.jlbennett.syncsports.databinding.FragmentHomeBinding
+import com.jlbennett.syncsports.databinding.FragmentSyncBinding
 
 
-class HomeFragment : Fragment() {
+class SyncFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val binding: FragmentHomeBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_home, container, false)
-
-        binding.dummyCard.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_syncFragment)
-        }
+        val binding: FragmentSyncBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_sync, container, false)
 
         return binding.root
     }

@@ -4,5 +4,9 @@
             android:id="@+id/main_navigation" app:startDestination="@id/homeFragment">
 
     <fragment android:id="@+id/homeFragment" android:name="com.jlbennett.syncsports.HomeFragment"
-              android:label="HomeFragment"/>
+              android:label="HomeFragment">
+        <action android:id="@+id/action_homeFragment_to_syncFragment" app:destination="@id/syncFragment"/>
+    </fragment>
+    <fragment android:id="@+id/syncFragment" android:name="com.jlbennett.syncsports.SyncFragment"
+              android:label="SyncFragment"/>
 </navigation>
