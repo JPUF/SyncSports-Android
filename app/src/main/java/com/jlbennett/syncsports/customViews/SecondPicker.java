@@ -24,6 +24,5 @@ public class SecondPicker extends NumberPicker {
         setMinValue(0);
         setMaxValue(59);
         setWrapSelectorWheel(true);
-        setValue(30);
     }
 }

@@ -21,10 +21,10 @@ public class HalfPicker extends NumberPicker {
     }
 
     private void init() {
-        setMinValue(0);
-        setMaxValue(1);
         setWrapSelectorWheel(false);
-        final String[] halves = {"1st Half", "2nd Half"};
-        setDisplayedValues(halves);
+        final String[] matchStates = {"Pre-Match", "1st Half", "Half Time", "2nd Half", "Full Time"};
+        setMinValue(0);
+        setMaxValue(matchStates.length - 1);
+        setDisplayedValues(matchStates);
     }
 }

@@ -31,17 +31,20 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" android:layout_gravity="end"
-                    android:layout_marginStart="16sp" android:layout_marginEnd="4sp"/>
+                    android:layout_marginStart="16sp" android:layout_marginEnd="4sp"
+                    android:visibility="invisible" tools:visibility="visible"/>
             <TextView
                     android:text="@string/time_separator"
                     android:layout_width="0dp"
                     android:layout_height="match_parent" android:id="@+id/separator_text" android:layout_weight="0.1"
-                    android:layout_gravity="center" android:textSize="24sp" android:gravity="center"/>
+                    android:layout_gravity="center" android:textSize="24sp" android:gravity="center"
+                    android:visibility="invisible" tools:visibility="visible"/>
             <com.jlbennett.syncsports.customViews.SecondPicker
                     android:layout_height="match_parent"
                     android:id="@+id/second_picker"
                     android:layout_width="0dp" android:layout_weight="1" android:layout_gravity="start"
-                    android:layout_marginStart="4sp" android:layout_marginEnd="16sp"/>
+                    android:layout_marginStart="4sp" android:layout_marginEnd="16sp"
+                    android:visibility="invisible" tools:visibility="visible"/>
         </LinearLayout>
         <Button
                 android:text="@string/chat"
