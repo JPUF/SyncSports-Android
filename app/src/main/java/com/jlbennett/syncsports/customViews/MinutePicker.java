@@ -24,5 +24,6 @@ public class MinutePicker extends NumberPicker {
         setMinValue(0);
         setMaxValue(50);
         setWrapSelectorWheel(true);
+        setValue(25);
     }
 }
