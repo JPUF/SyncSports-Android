@@ -64,17 +64,18 @@ class SyncFragment : Fragment() {
                 }
             }
             val matchState = when(binding.halfPicker.value){
-                0 -> MatchTime.State.PRE_MATCH
-                1 -> MatchTime.State.FIRST_HALF
-                2 -> MatchTime.State.HALF_TIME
-                3 -> MatchTime.State.SECOND_HALF
-                4 -> MatchTime.State.FULL_TIME
-                else -> MatchTime.State.PRE_MATCH
+                0 -> State.PRE_MATCH
+                1 -> State.FIRST_HALF
+                2 -> State.HALF_TIME
+                3 -> State.SECOND_HALF
+                4 -> State.FULL_TIME
+                else -> State.PRE_MATCH
             }
             val time = MatchTime(matchState, minutes, seconds)
             Log.i("chatTime", "State: ${time.state} -- Time: ${time.minutes}:${time.seconds}")
-            //TODO send this time object to the chat fragment.
-            findNavController().navigate(R.id.action_syncFragment_to_chatFragment)
+
+            val action = SyncFragmentDirections.actionSyncFragmentToChatFragment(time)
+            findNavController().navigate(action)
         }
 
         return binding.root

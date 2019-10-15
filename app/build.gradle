@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: "androidx.navigation.safeargs"
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -22,6 +24,9 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
