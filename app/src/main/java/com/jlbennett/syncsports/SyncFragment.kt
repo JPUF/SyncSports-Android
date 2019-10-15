@@ -2,6 +2,7 @@ package com.jlbennett.syncsports
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +25,6 @@ class SyncFragment : Fragment() {
         val binding: FragmentSyncBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_sync, container, false
         )
-
-        binding.chatButton.setOnClickListener { findNavController().navigate(R.id.action_syncFragment_to_chatFragment) }
 
         binding.halfPicker.setOnValueChangedListener { _, _, selectedValue ->
             val visibility: Int = when (selectedValue) {
@@ -51,8 +50,34 @@ class SyncFragment : Fragment() {
             }
         }
 
+        binding.chatButton.setOnClickListener {
+            var minutes = 0
+            var seconds = 0
+            when(binding.halfPicker.value) {
+                1 -> {
+                    minutes = binding.minutePicker.value
+                    seconds = binding.secondPicker.value
+                }
+                3 -> {
+                    minutes = (binding.minutePicker.value + 45)
+                    seconds = binding.secondPicker.value
+                }
+            }
+            val matchState = when(binding.halfPicker.value){
+                0 -> MatchTime.State.PRE_MATCH
+                1 -> MatchTime.State.FIRST_HALF
+                2 -> MatchTime.State.HALF_TIME
+                3 -> MatchTime.State.SECOND_HALF
+                4 -> MatchTime.State.FULL_TIME
+                else -> MatchTime.State.PRE_MATCH
+            }
+            val time = MatchTime(matchState, minutes, seconds)
+            Log.i("chatTime", "State: ${time.state} -- Time: ${time.minutes}:${time.seconds}")
+
+            findNavController().navigate(R.id.action_syncFragment_to_chatFragment)
+        }
+
         return binding.root
     }
-
 
 }
