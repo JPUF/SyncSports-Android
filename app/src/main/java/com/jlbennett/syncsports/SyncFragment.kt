@@ -73,7 +73,7 @@ class SyncFragment : Fragment() {
             }
             val time = MatchTime(matchState, minutes, seconds)
             Log.i("chatTime", "State: ${time.state} -- Time: ${time.minutes}:${time.seconds}")
-
+            //TODO send this time object to the chat fragment.
             findNavController().navigate(R.id.action_syncFragment_to_chatFragment)
         }
 
