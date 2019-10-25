@@ -13,6 +13,10 @@ class ChatMessageAdapter(messages: List<String>) : RecyclerView.Adapter<ChatItem
         notifyDataSetChanged()
     }
 
+    fun addMessage(message: String) {
+        data = data + message
+    }
+
     override fun getItemCount() = data.size
 
     override fun onBindViewHolder(holder: ChatItemViewHolder, position: Int) {
