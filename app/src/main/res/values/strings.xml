@@ -9,4 +9,6 @@
     <string name="match_time_on_your_stream">Match time on your stream</string>
     <string name="chat">Chat!</string>
     <string name="time_separator">:</string>
+    <string name="message">Message</string>
+    <string name="send">SEND</string>
 </resources>

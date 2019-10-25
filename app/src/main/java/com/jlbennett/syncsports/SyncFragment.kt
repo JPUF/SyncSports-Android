@@ -72,7 +72,6 @@ class SyncFragment : Fragment() {
                 else -> State.PRE_MATCH
             }
             val time = MatchTime(matchState, minutes, seconds)
-            Log.i("chatTime", "State: ${time.state} -- Time: ${time.minutes}:${time.seconds}")
 
             val action = SyncFragmentDirections.actionSyncFragmentToChatFragment(time)
             findNavController().navigate(action)
