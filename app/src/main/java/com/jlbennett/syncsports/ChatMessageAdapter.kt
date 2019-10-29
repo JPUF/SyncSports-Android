@@ -1,14 +1,15 @@
 package com.jlbennett.syncsports
 
 import android.graphics.Color
+import android.graphics.Typeface.BOLD
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
 import kotlin.random.Random
 
 class ChatMessageAdapter(messages: List<String>) : RecyclerView.Adapter<ChatItemViewHolder>() {
@@ -27,29 +28,33 @@ class ChatMessageAdapter(messages: List<String>) : RecyclerView.Adapter<ChatItem
 
     override fun onBindViewHolder(holder: ChatItemViewHolder, position: Int) {
         val item = data[position]
-        //holder.textView.text = item
-        val usernameText = holder.messageLayout[0] as TextView
-        val messageText = holder.messageLayout[1] as TextView
-        val dummyUsers = listOf("Kenny", "AstroHound", "Kai", "EightSevenFortyFifteen")
-        val formattedUsername = dummyUsers[Random.nextInt(0, dummyUsers.size)]
-        usernameText.text = formattedUsername
-        messageText.text = item
+        val messageText = holder.messageTextView
 
-        when(Random.nextInt(0, 5)){
-            0 -> usernameText.setTextColor(Color.BLUE)
-            1 -> usernameText.setTextColor(Color.RED)
-            2 -> usernameText.setTextColor(Color.MAGENTA)
-            3 -> usernameText.setTextColor(Color.DKGRAY)
-            4 -> usernameText.setTextColor(Color.GREEN)
+        val dummyUsers = listOf("Kenny", "AstroHound", "Kai", "EightSevenFortyFifteen")
+        val username = dummyUsers[Random.nextInt(0, dummyUsers.size)]
+        val userColor = when(Random.nextInt(0, 5)){
+            0 -> Color.BLUE
+            1 -> Color.RED
+            2 -> Color.MAGENTA
+            3 -> Color.DKGRAY
+            4 -> Color.GREEN
+            else -> Color.BLACK
         }
+
+        val messageSpannableString = SpannableString("$username: $item")
+        messageSpannableString.setSpan(ForegroundColorSpan(userColor),0, username.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        messageSpannableString.setSpan(StyleSpan(BOLD),0, username.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        messageText.text = messageSpannableString
+
+
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.chat_item_view, parent, false) as LinearLayout
+        val view = layoutInflater.inflate(R.layout.chat_item_view, parent, false) as TextView
         return ChatItemViewHolder(view)
     }
 }
 
-class ChatItemViewHolder(val messageLayout: LinearLayout): RecyclerView.ViewHolder(messageLayout)
+class ChatItemViewHolder(val messageTextView: TextView): RecyclerView.ViewHolder(messageTextView)
