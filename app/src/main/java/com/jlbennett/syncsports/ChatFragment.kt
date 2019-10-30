@@ -1,6 +1,7 @@
 package com.jlbennett.syncsports
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -38,17 +39,18 @@ class ChatFragment : Fragment() {
         binding.timeText.text = matchTimeString
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 
-        val dummyMessages = mutableListOf<String>()
-        for (i in 1..32) {
-            dummyMessages.add("Message: $i")
-        }
+        val dummyMessages = listOf<ChatMessage>(
+            ChatMessage(User("AstroHound", Color.parseColor("#EE0505")), "Nice pass, excellent form"),
+            ChatMessage(User("EightSevenFortyFifteen", Color.parseColor("#05EE05")), "Lorem ipsum dolor sit amet"),
+            ChatMessage(User("-RainMan500", Color.parseColor("#0505EE")), "Lorem ipsum dolor sit amet"),
+            ChatMessage(User("SharmaGurthX", Color.parseColor("#05EEEE")), "Lorem ipsum dolor sit amet")
+        )
 
         recyclerViewAdapter = ChatMessageAdapter(dummyMessages)
         binding.chatMessageList.adapter = recyclerViewAdapter
 
         binding.sendButton.setOnClickListener {
             val chatMessage = binding.inputText.text
-            Log.i("chatMessage", "SENDING MESSAGE: $chatMessage")
             binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
             binding.inputText.setText(R.string.empty)
 
@@ -70,16 +72,13 @@ class ChatFragment : Fragment() {
             val msgObject = args[0] as JSONObject
             val username: String = msgObject.get("username") as String
             val message: String = msgObject.get("message") as String
-
-            val formattedString = "$username: $message"
-            displayMessage(formattedString)
+            displayMessage(username, message)
         }
 
         socket.connect()
     }
 
     private fun sendMessage(message: String) {
-        Log.d("ChatNetworkLog", "sendMessage Called")
         val msgObject = JSONObject()
         msgObject.put("username", "AndroidApp")
         msgObject.put("message", message)
@@ -87,11 +86,11 @@ class ChatFragment : Fragment() {
         socket.emit("chat_message", msgObject)
     }
 
-    private fun displayMessage(message: String) {
-        Log.d("ChatNetworkLog", "Message Received: $message")
+    private fun displayMessage(username: String, message: String) {
+        val chatMessage = ChatMessage(User(username, Color.parseColor("#AFACA0")), message)
         activity!!.runOnUiThread {
             //Ugly
-            recyclerViewAdapter.addMessage(message)
+            recyclerViewAdapter.addMessage(chatMessage)
         }
     }
 
