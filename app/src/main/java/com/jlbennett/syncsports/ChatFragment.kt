@@ -71,8 +71,10 @@ class ChatFragment : Fragment() {
         socket.on("chat_message") { args ->
             val msgObject = args[0] as JSONObject
             val username: String = msgObject.get("username") as String
+            val usercolor: String = msgObject.get("color") as String
             val message: String = msgObject.get("message") as String
-            displayMessage(username, message)
+            Log.d("usercolour", "$username - $usercolor - $message")
+            displayMessage(User(username, Color.parseColor(usercolor)), message)
         }
 
         socket.connect()
@@ -81,13 +83,14 @@ class ChatFragment : Fragment() {
     private fun sendMessage(message: String) {
         val msgObject = JSONObject()
         msgObject.put("username", "AndroidApp")
+        msgObject.put("color", "#5e0104")
         msgObject.put("message", message)
         msgObject.put("user_time", Date().time)
         socket.emit("chat_message", msgObject)
     }
 
-    private fun displayMessage(username: String, message: String) {
-        val chatMessage = ChatMessage(User(username, Color.parseColor("#AFACA0")), message)
+    private fun displayMessage(user: User, message: String) {
+        val chatMessage = ChatMessage(User(user.name, user.color), message)
         activity!!.runOnUiThread {
             //Ugly
             recyclerViewAdapter.addMessage(chatMessage)
