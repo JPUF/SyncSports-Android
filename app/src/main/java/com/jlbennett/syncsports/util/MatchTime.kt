@@ -1,4 +1,4 @@
-package com.jlbennett.syncsports
+package com.jlbennett.syncsports.util
 
 import android.os.Parcel
 import android.os.Parcelable

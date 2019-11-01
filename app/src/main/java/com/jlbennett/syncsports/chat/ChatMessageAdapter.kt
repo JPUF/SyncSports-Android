@@ -1,6 +1,5 @@
-package com.jlbennett.syncsports
+package com.jlbennett.syncsports.chat
 
-import android.graphics.Color
 import android.graphics.Typeface.BOLD
 import android.text.SpannableString
 import android.text.Spanned
@@ -10,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.random.Random
+import com.jlbennett.syncsports.R
 
 class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<ChatItemViewHolder>() {
     //"MSG1","MSG2","MSG3","MSG4","MSG5","MSG6","MSG7","MSG8"

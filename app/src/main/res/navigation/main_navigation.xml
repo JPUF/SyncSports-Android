@@ -3,16 +3,16 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/main_navigation" app:startDestination="@id/homeFragment">
 
-    <fragment android:id="@+id/homeFragment" android:name="com.jlbennett.syncsports.HomeFragment"
+    <fragment android:id="@+id/homeFragment" android:name="com.jlbennett.syncsports.home.HomeFragment"
               android:label="HomeFragment">
         <action android:id="@+id/action_homeFragment_to_syncFragment" app:destination="@id/syncFragment"/>
     </fragment>
-    <fragment android:id="@+id/syncFragment" android:name="com.jlbennett.syncsports.SyncFragment"
+    <fragment android:id="@+id/syncFragment" android:name="com.jlbennett.syncsports.sync.SyncFragment"
               android:label="SyncFragment">
         <action android:id="@+id/action_syncFragment_to_chatFragment" app:destination="@id/chatFragment"/>
     </fragment>
-    <fragment android:id="@+id/chatFragment" android:name="com.jlbennett.syncsports.ChatFragment"
+    <fragment android:id="@+id/chatFragment" android:name="com.jlbennett.syncsports.chat.ChatFragment"
               android:label="ChatFragment">
-        <argument android:name="matchTime" app:argType="com.jlbennett.syncsports.MatchTime"/>
+        <argument android:name="matchTime" app:argType="com.jlbennett.syncsports.util.MatchTime"/>
     </fragment>
 </navigation>

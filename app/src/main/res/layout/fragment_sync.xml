@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools">
     <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
                                                        android:layout_height="match_parent"
-                                                       tools:context=".SyncFragment" android:id="@+id/sync_layout">
+                                                       tools:context=".sync.SyncFragment" android:id="@+id/sync_layout">
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

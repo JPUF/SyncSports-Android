@@ -1,16 +1,16 @@
-package com.jlbennett.syncsports
+package com.jlbennett.syncsports.sync
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.NumberPicker
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.jlbennett.syncsports.util.MatchTime
+import com.jlbennett.syncsports.R
+import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.customViews.MinutePicker
 import com.jlbennett.syncsports.databinding.FragmentSyncBinding
 
