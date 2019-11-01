@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jlbennett.syncsports.R
@@ -23,6 +24,7 @@ import java.util.*
 class ChatFragment : Fragment() {
 
     private val socket = IO.socket("http://192.168.122.1:4000")
+    private lateinit var viewModel: ChatViewModel
     private lateinit var recyclerViewAdapter: ChatMessageAdapter
 
     override fun onCreateView(
@@ -32,6 +34,8 @@ class ChatFragment : Fragment() {
         val binding: FragmentChatBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_chat, container, false
         )
+
+        viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
 
         connectToChatAPI()
 
