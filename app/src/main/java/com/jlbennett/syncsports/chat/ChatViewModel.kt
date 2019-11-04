@@ -63,7 +63,7 @@ class ChatViewModel : ViewModel() {
             val message: String = msgObject.get("message") as String
             Log.d("usercolour", "$username - $usercolor - $message")
             //displayMessage(User(username, Color.parseColor(usercolor)), message)
-            _eventMessageToShow.value = true
+            _eventMessageToShow.postValue(true)
             //TODO send message with this.
         }
         socket.connect()
