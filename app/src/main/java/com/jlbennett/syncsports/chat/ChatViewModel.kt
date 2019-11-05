@@ -13,7 +13,8 @@ import java.util.*
 
 class ChatViewModel : ViewModel() {
 
-    private val socket = IO.socket("http://192.168.122.1:4000")
+    //private val socket = IO.socket("http://192.168.122.1:4000")
+    private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
 
     val dummyMessages = listOf(
         ChatMessage(
@@ -38,14 +39,13 @@ class ChatViewModel : ViewModel() {
     val eventMessageToShow: LiveData<Boolean>
         get() = _eventMessageToShow
 
-    init {
-        Log.d("viewmodel", "ChatViewModel init")
-        _eventMessageToShow.value = false
-    }
+    private val _receivedMessage = MutableLiveData<ChatMessage>()
+    val receivedMessage: LiveData<ChatMessage>
+        get() = _receivedMessage
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("viewmodel", "ChatViewModel onCleared()")
+    init {
+        _eventMessageToShow.value = false
+        connectToChatAPI()
     }
 
     fun connectToChatAPI() {
@@ -61,10 +61,9 @@ class ChatViewModel : ViewModel() {
             val username: String = msgObject.get("username") as String
             val usercolor: String = msgObject.get("color") as String
             val message: String = msgObject.get("message") as String
-            Log.d("usercolour", "$username - $usercolor - $message")
-            //displayMessage(User(username, Color.parseColor(usercolor)), message)
+            val chatMessage = ChatMessage((User(username, Color.parseColor(usercolor))), message)
+            _receivedMessage.postValue(chatMessage)
             _eventMessageToShow.postValue(true)
-            //TODO send message with this.
         }
         socket.connect()
     }

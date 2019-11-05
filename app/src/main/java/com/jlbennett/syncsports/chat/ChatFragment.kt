@@ -35,13 +35,16 @@ class ChatFragment : Fragment() {
 
         viewModel.eventMessageToShow.observe(this, Observer {hasMessageToShow ->
             if (hasMessageToShow) {
-                displayMessage(ChatMessage(User("mes", Color.RED), "Test Message"))
+                val chatMessage: ChatMessage =
+                    viewModel.receivedMessage.value ?:
+                    ChatMessage(User("X", Color.BLACK), "Error receiving message")
+
+                displayMessage(chatMessage)
                 viewModel.onDisplayMessageComplete()
-                //TODO test to see if test message is displayed.
             }
         })
 
-        viewModel.connectToChatAPI()
+        //viewModel.connectToChatAPI()
 
         val args: ChatFragmentArgs by navArgs()
         val matchTime = args.matchTime
