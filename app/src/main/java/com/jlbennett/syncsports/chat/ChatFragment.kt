@@ -33,18 +33,15 @@ class ChatFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
 
-        viewModel.eventMessageToShow.observe(this, Observer {hasMessageToShow ->
+        viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
-                    viewModel.receivedMessage.value ?:
-                    ChatMessage(User("X", Color.BLACK), "Error receiving message")
+                    viewModel.receivedMessage.value ?: ChatMessage(User("X", Color.BLACK), "Error receiving message")
 
                 displayMessage(chatMessage)
                 viewModel.onDisplayMessageComplete()
             }
         })
-
-        //viewModel.connectToChatAPI()
 
         val args: ChatFragmentArgs by navArgs()
         val matchTime = args.matchTime
@@ -65,7 +62,7 @@ class ChatFragment : Fragment() {
         return binding.root
     }
 
-    fun displayMessage(chatMessage: ChatMessage) {
+    private fun displayMessage(chatMessage: ChatMessage) {
         activity!!.runOnUiThread {
             //Ugly
             recyclerViewAdapter.addMessage(chatMessage)
