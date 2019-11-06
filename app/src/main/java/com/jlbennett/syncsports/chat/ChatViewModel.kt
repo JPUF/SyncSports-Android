@@ -15,7 +15,7 @@ class ChatViewModel : ViewModel() {
 
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
-    private val socket = IO.socket("http://syncsport.herokuapp.com/")//change emulator proxy settings (settings/proxy)
+    private val socket = IO.socket("https://syncsport.herokuapp.com/")//change emulator proxy settings (settings/proxy)
 
     val dummyMessages = listOf(
         ChatMessage(
