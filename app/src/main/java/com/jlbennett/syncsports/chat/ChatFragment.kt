@@ -21,6 +21,7 @@ class ChatFragment : Fragment() {
 
 
     private lateinit var viewModel: ChatViewModel
+    private lateinit var viewModelFactory: ChatViewModelFactory
     private lateinit var recyclerViewAdapter: ChatMessageAdapter
 
     override fun onCreateView(
@@ -31,20 +32,23 @@ class ChatFragment : Fragment() {
             inflater, R.layout.fragment_chat, container, false
         )
 
-        viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
+        val args: ChatFragmentArgs by navArgs()
+
+        viewModelFactory = ChatViewModelFactory(args.matchTime)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
 
         viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
-                    viewModel.receivedMessage.value ?: ChatMessage(User("X", Color.BLACK), "Error receiving message")
+                    viewModel.receivedMessage.value ?:
+                    ChatMessage(User("X", Color.BLACK), "Error receiving message")
 
                 displayMessage(chatMessage)
                 viewModel.onDisplayMessageComplete()
             }
         })
 
-        val args: ChatFragmentArgs by navArgs()
-        val matchTime = args.matchTime
+        val matchTime = viewModel.matchTime.value!!
         val matchTimeString = "MATCH ${matchTime.state} -- ${matchTime.minutes}:${matchTime.seconds}"
         binding.timeText.text = matchTimeString
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager

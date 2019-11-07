@@ -5,13 +5,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.User
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 import java.util.*
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(matchTime: MatchTime) : ViewModel() {
 
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
@@ -44,7 +45,12 @@ class ChatViewModel : ViewModel() {
     val receivedMessage: LiveData<ChatMessage>
         get() = _receivedMessage
 
+    private val _matchTime = MutableLiveData<MatchTime>()
+    val matchTime: LiveData<MatchTime>
+        get() = _matchTime
+
     init {
+        _matchTime.value = matchTime
         _eventMessageToShow.value = false
         connectToChatAPI()
     }
