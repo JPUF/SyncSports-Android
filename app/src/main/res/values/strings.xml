@@ -11,4 +11,6 @@
     <string name="message">Message</string>
     <string name="send">SEND</string>
     <string name="empty"></string>
+    <string name="invalid">Username invalid</string>
+    <string name="valid">Username valid</string>
 </resources>
