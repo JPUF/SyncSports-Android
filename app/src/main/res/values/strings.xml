@@ -13,4 +13,5 @@
     <string name="empty"></string>
     <string name="invalid">Username invalid</string>
     <string name="valid">Username valid</string>
+    <string name="username_key">username</string>
 </resources>

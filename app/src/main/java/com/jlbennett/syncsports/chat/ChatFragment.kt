@@ -1,6 +1,7 @@
 package com.jlbennett.syncsports.chat
 
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,9 +33,11 @@ class ChatFragment : Fragment() {
             inflater, R.layout.fragment_chat, container, false
         )
 
-        val args: ChatFragmentArgs by navArgs()
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "Username")!!
 
-        viewModelFactory = ChatViewModelFactory(args.matchTime)
+        val args: ChatFragmentArgs by navArgs()
+        viewModelFactory = ChatViewModelFactory(args.matchTime, persistentUsername)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
 
         viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->

@@ -12,11 +12,11 @@ import io.socket.client.Socket
 import org.json.JSONObject
 import java.util.*
 
-class ChatViewModel(matchTime: MatchTime) : ViewModel() {
+class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
 
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
-    private val socket = IO.socket("https://syncsport.herokuapp.com/")//change emulator proxy settings (settings/proxy)
+    private val socket = IO.socket("https://syncsport.herokuapp.com/")
 
     val dummyMessages = listOf(
         ChatMessage(
@@ -49,16 +49,19 @@ class ChatViewModel(matchTime: MatchTime) : ViewModel() {
     val matchTime: LiveData<MatchTime>
         get() = _matchTime
 
+    private val _username = MutableLiveData<String>()
+
     init {
         _matchTime.value = matchTime
+        _username.value = username
         _eventMessageToShow.value = false
         connectToChatAPI()
     }
 
-    fun connectToChatAPI() {
+    private fun connectToChatAPI() {
         Log.d("ChatNetworkLog", "connectToChatAPI Called")
         socket.on(Socket.EVENT_CONNECT) {
-            val usernameString = "AndroidApp"
+            val usernameString = _username.value
             socket.emit("username", usernameString)
         }
 
@@ -77,11 +80,11 @@ class ChatViewModel(matchTime: MatchTime) : ViewModel() {
 
     fun sendMessage(message: String) {
         val msgObject = JSONObject()
-        msgObject.put("username", "AndroidApp")
+        msgObject.put("username", _username.value)
         msgObject.put("color", "#5e0104")
         msgObject.put("message", message)
         msgObject.put("user_time", Date().time)
-        Log.d("ChatNetworkLog", "Before emission: $message")
+        Log.d("ChatNetworkLog", "Before emission: ${_username.value} : $message")
         socket.emit("chat_message", msgObject)
     }
 
