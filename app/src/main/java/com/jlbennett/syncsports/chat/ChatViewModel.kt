@@ -39,6 +39,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
         }
     }
 
+
     val dummyMessages = listOf(
         ChatMessage(
             User("AstroHound", Color.parseColor("#EE0505")),
@@ -57,6 +58,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
             "Lorem ipsum dolor sit amet"
         )
     )
+
 
     private val _eventMessageToShow = MutableLiveData<Boolean>()
     val eventMessageToShow: LiveData<Boolean>
@@ -107,11 +109,36 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
             }
             val incomingMatchTime = MatchTime(state, minutes, seconds)
             Log.d("ChatNetworkLog", "received: $incomingMatchTime")
-            _receivedMessage.postValue(chatMessage)
-            _eventMessageToShow.postValue(true)
+            val timeDifference: Long = calculateDifference(incomingMatchTime) * 1000L
+            updateMessage(chatMessage, timeDifference)
         }
         socket.connect()
     }
+
+    private fun calculateDifference(incomingMatchTime: MatchTime): Int {
+        //TODO handle different 'states'
+        val currentMatchTime = _matchTime.value!!
+        var minuteDifference = 0
+        if(incomingMatchTime.minutes > currentMatchTime.minutes) {
+           minuteDifference = incomingMatchTime.minutes - currentMatchTime.minutes
+        }
+        var secondDifference = 60 * minuteDifference
+        secondDifference += incomingMatchTime.seconds - currentMatchTime.seconds
+        return if(secondDifference >= 0) secondDifference else 0
+
+    }
+
+    private fun updateMessage(chatMessage: ChatMessage, delay: Long) {
+        class MessageDelayRunnable : Runnable {
+            override fun run() {
+                _receivedMessage.postValue(chatMessage)
+                _eventMessageToShow.postValue(true)
+            }
+        }
+        handler.postDelayed(MessageDelayRunnable(), delay)
+        //TODO consider if I need to remove callbacks?
+    }
+
 
     fun sendMessage(message: String) {
         val msgObject = JSONObject()
