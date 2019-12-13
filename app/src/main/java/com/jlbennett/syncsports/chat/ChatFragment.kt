@@ -43,17 +43,20 @@ class ChatFragment : Fragment() {
         viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
-                    viewModel.receivedMessage.value ?:
-                    ChatMessage(User("X", Color.BLACK), "Error receiving message")
+                    viewModel.receivedMessage.value ?: ChatMessage(User("X", Color.BLACK), "Error receiving message")
 
                 displayMessage(chatMessage)
                 viewModel.onDisplayMessageComplete()
             }
         })
 
-        val matchTime = viewModel.matchTime.value!!
-        val matchTimeString = "MATCH ${matchTime.state} -- ${matchTime.minutes}:${matchTime.seconds}"
-        binding.timeText.text = matchTimeString
+        viewModel.matchTime.observe(this, Observer { updatingMatchTime ->
+            val minString = String.format("%02d", updatingMatchTime.minutes)
+            val secString = String.format("%02d", updatingMatchTime.seconds)
+            val matchTimeString = "MATCH ${updatingMatchTime.state} -- $minString:$secString"
+            binding.timeText.text = matchTimeString
+        })
+
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 
         recyclerViewAdapter = ChatMessageAdapter(viewModel.dummyMessages)
@@ -76,4 +79,8 @@ class ChatFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.stopUpdatingTimer()
+    }
 }

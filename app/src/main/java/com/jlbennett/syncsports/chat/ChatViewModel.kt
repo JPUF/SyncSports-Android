@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import android.os.Handler
 import com.jlbennett.syncsports.util.MatchTime
+import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -17,6 +19,27 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
     private val socket = IO.socket("https://syncsport.herokuapp.com/")
+
+    //TODO provide a method to remove callbacks from handler. Call from Fragment onPause.
+    private val handler = Handler()
+    private val timerRunnable: Runnable = run {
+        Runnable {
+            val state = _matchTime.value!!.state
+            var minutes = _matchTime.value!!.minutes
+            var seconds = _matchTime.value!!.seconds
+            Log.d("Match Time", "Updating time: $seconds")
+            if (state == State.FIRST_HALF || state == State.SECOND_HALF) {
+                if (seconds < 59) {
+                    seconds += 1
+                } else {
+                    minutes += 1
+                    seconds = 0
+                }
+            }
+            _matchTime.postValue(MatchTime(state, minutes, seconds))
+            handler.postDelayed(timerRunnable, 1000)
+        }
+    }
 
     val dummyMessages = listOf(
         ChatMessage(
@@ -56,6 +79,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
         _username.value = username
         _eventMessageToShow.value = false
         connectToChatAPI()
+        handler.postDelayed(timerRunnable, 1000)
     }
 
     private fun connectToChatAPI() {
@@ -64,7 +88,6 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
             val usernameString = _username.value
             socket.emit("username", usernameString)
         }
-
 
         socket.on("chat_message") { args ->
             val msgObject = args[0] as JSONObject
@@ -90,5 +113,9 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
 
     fun onDisplayMessageComplete() {
         _eventMessageToShow.value = false
+    }
+
+    fun stopUpdatingTimer() {
+        handler.removeCallbacks(timerRunnable)
     }
 }
