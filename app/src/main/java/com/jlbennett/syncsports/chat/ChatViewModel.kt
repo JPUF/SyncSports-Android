@@ -36,6 +36,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
             }
             _matchTime.postValue(MatchTime(state, minutes, seconds))
             handler.postDelayed(timerRunnable, 1000)
+            //TODO include milliseconds (maybe 1/4 seconds?). So it's higher fidelity.
         }
     }
 
@@ -143,7 +144,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     fun sendMessage(message: String) {
         val msgObject = JSONObject()
         msgObject.put("username", _username.value)
-        msgObject.put("color", "#5e0104")
+        msgObject.put("color", "#5e0104")//TODO take user input for color
         msgObject.put("message", message)
         val timeObject = JSONObject()
         timeObject.put("state", _matchTime.value!!.state)
