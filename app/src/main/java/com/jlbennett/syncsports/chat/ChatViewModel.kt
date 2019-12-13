@@ -12,7 +12,6 @@ import com.jlbennett.syncsports.util.User
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
-import java.util.*
 
 class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
 
@@ -20,7 +19,6 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
     private val socket = IO.socket("https://syncsport.herokuapp.com/")
 
-    //TODO provide a method to remove callbacks from handler. Call from Fragment onPause.
     private val handler = Handler()
     private val timerRunnable: Runnable = run {
         Runnable {
@@ -77,9 +75,9 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     init {
         _matchTime.value = matchTime
         _username.value = username
+        handler.postDelayed(timerRunnable, 1000)
         _eventMessageToShow.value = false
         connectToChatAPI()
-        handler.postDelayed(timerRunnable, 1000)
     }
 
     private fun connectToChatAPI() {
@@ -90,11 +88,25 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
         }
 
         socket.on("chat_message") { args ->
+            //TODO cannot receive messages from WebApp. It doesn't send an appropriate MatchTime JSON object.
             val msgObject = args[0] as JSONObject
-            val username: String = msgObject.get("username") as String
-            val usercolor: String = msgObject.get("color") as String
-            val message: String = msgObject.get("message") as String
-            val chatMessage = ChatMessage((User(username, Color.parseColor(usercolor))), message)
+            val username = msgObject.get("username") as String
+            val userColor = msgObject.get("color") as String
+            val message = msgObject.get("message") as String
+            val chatMessage = ChatMessage((User(username, Color.parseColor(userColor))), message)
+            val timeObject = msgObject.get("user_time") as JSONObject
+            val minutes = timeObject.get("minutes") as Int
+            val seconds = timeObject.get("seconds") as Int
+            val state = when(timeObject.get("state")) {
+                "PRE_MATCH" -> State.PRE_MATCH
+                "FIRST_HALF" -> State.FIRST_HALF
+                "HALF_TIME" -> State.HALF_TIME
+                "SECOND_HALF" -> State.SECOND_HALF
+                "FULL_TIME" -> State.FULL_TIME
+                else -> State.PRE_MATCH
+            }
+            val incomingMatchTime = MatchTime(state, minutes, seconds)
+            Log.d("ChatNetworkLog", "received: $incomingMatchTime")
             _receivedMessage.postValue(chatMessage)
             _eventMessageToShow.postValue(true)
         }
@@ -106,8 +118,12 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
         msgObject.put("username", _username.value)
         msgObject.put("color", "#5e0104")
         msgObject.put("message", message)
-        msgObject.put("user_time", Date().time)
-        Log.d("ChatNetworkLog", "Before emission: ${_username.value} : $message")
+        val timeObject = JSONObject()
+        timeObject.put("state", _matchTime.value!!.state)
+        timeObject.put("minutes", _matchTime.value!!.minutes)
+        timeObject.put("seconds", _matchTime.value!!.seconds)
+        msgObject.put("user_time", timeObject)
+        Log.d("ChatNetworkLog", "Before emission: ${_username.value} : $message : $timeObject")
         socket.emit("chat_message", msgObject)
     }
 
