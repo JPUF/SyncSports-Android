@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentHomeBinding
@@ -51,17 +52,17 @@ class HomeFragment : Fragment() {
             override fun afterTextChanged(p0: Editable?) {}
         })
 
-        val fragmentTransaction = fragmentManager!!.beginTransaction()
-        val previousDialog = fragmentManager!!.findFragmentByTag("colorPickerDialog")
-        if (previousDialog != null) fragmentTransaction.remove(previousDialog)
-        val colorPickerDialogFragment = ColorPickerDialogFragment()
-        fragmentTransaction.addToBackStack(null)
 
         binding.colorButton.setOnClickListener {
-            fragmentManager!!.executePendingTransactions()
-            //colorPickerDialogFragment.show(fragmentTransaction, "colorPickerDialog")
-            fragmentTransaction.add(colorPickerDialogFragment, "colorPickerDialog")
-            fragmentTransaction.commitAllowingStateLoss()
+            var fragmentTransaction = fragmentManager!!.beginTransaction()
+            val previousDialog = fragmentManager!!.findFragmentByTag("colorPickerDialog")
+            if (previousDialog != null) {
+                fragmentTransaction.remove(previousDialog)
+            }
+            fragmentTransaction.addToBackStack(null)
+
+            val colorPickerDialogFragment = ColorPickerDialogFragment()
+            colorPickerDialogFragment.show(fragmentTransaction, "colorPickerDialog")
         }
 
         return binding.root

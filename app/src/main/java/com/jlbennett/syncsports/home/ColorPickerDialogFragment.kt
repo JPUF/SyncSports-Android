@@ -13,8 +13,10 @@ class ColorPickerDialogFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.color_picker, container, false)
+
         val button1 = view.findViewById<Button>(R.id.color1)
         button1.setOnClickListener {
+            Log.d("HomeFragment Log", "fragment button: dismissing")
             dismiss()
         }
         return view
