@@ -5,4 +5,13 @@
     <color name="colorAccent">#881fcf</color>
     <color name="colorValid">#4CAF50</color>
     <color name="colorInvalid">#FFAF4C4C</color>
+
+    <color name="blue">#0B4AB0</color>
+    <color name="red">#910606</color>
+    <color name="orange">#DE8100</color>
+    <color name="yellow">#DBCA12</color>
+    <color name="green">#13AD02</color>
+    <color name="purple">#7D02AD</color>
+
+
 </resources>

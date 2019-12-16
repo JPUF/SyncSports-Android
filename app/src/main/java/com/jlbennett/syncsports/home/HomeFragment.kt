@@ -54,13 +54,10 @@ class HomeFragment : Fragment() {
 
 
         binding.colorButton.setOnClickListener {
-            var fragmentTransaction = fragmentManager!!.beginTransaction()
+            val fragmentTransaction = fragmentManager!!.beginTransaction()
             val previousDialog = fragmentManager!!.findFragmentByTag("colorPickerDialog")
-            if (previousDialog != null) {
-                fragmentTransaction.remove(previousDialog)
-            }
+            if (previousDialog != null) fragmentTransaction.remove(previousDialog)
             fragmentTransaction.addToBackStack(null)
-
             val colorPickerDialogFragment = ColorPickerDialogFragment()
             colorPickerDialogFragment.show(fragmentTransaction, "colorPickerDialog")
         }
