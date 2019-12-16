@@ -155,6 +155,16 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
         socket.emit("chat_message", msgObject)
     }
 
+    fun disconnectFromChatroom() {
+        socket.disconnect()
+    }
+
+    fun reconnectToChatroom() {
+        if(!socket.connected()){
+            socket.connect()
+        }
+    }
+
     fun onDisplayMessageComplete() {
         _eventMessageToShow.value = false
     }

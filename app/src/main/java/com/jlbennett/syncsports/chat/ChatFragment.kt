@@ -79,8 +79,14 @@ class ChatFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.reconnectToChatroom()
+    }
+
     override fun onPause() {
         super.onPause()
         viewModel.stopUpdatingTimer()
+        viewModel.disconnectFromChatroom()
     }
 }
