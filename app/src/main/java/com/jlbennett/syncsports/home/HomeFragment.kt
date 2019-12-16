@@ -3,23 +3,21 @@ package com.jlbennett.syncsports.home
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentHomeBinding
-import org.w3c.dom.Text
 import java.util.regex.Pattern
 
 
@@ -52,6 +50,19 @@ class HomeFragment : Fragment() {
 
             override fun afterTextChanged(p0: Editable?) {}
         })
+
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        val previousDialog = fragmentManager!!.findFragmentByTag("colorPickerDialog")
+        if (previousDialog != null) fragmentTransaction.remove(previousDialog)
+        val colorPickerDialogFragment = ColorPickerDialogFragment()
+        fragmentTransaction.addToBackStack(null)
+
+        binding.colorButton.setOnClickListener {
+            fragmentManager!!.executePendingTransactions()
+            //colorPickerDialogFragment.show(fragmentTransaction, "colorPickerDialog")
+            fragmentTransaction.add(colorPickerDialogFragment, "colorPickerDialog")
+            fragmentTransaction.commitAllowingStateLoss()
+        }
 
         return binding.root
     }
@@ -88,6 +99,4 @@ class HomeFragment : Fragment() {
         preferenceEditor?.putString(getString(R.string.username_key), username)//TODO only call on navigate.
         preferenceEditor?.apply()
     }
-
-
 }
