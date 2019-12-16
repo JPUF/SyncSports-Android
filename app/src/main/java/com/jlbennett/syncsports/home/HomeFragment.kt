@@ -1,10 +1,13 @@
 package com.jlbennett.syncsports.home
 
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
@@ -54,15 +57,24 @@ class HomeFragment : Fragment() {
 
 
         binding.colorButton.setOnClickListener {
-            val fragmentTransaction = fragmentManager!!.beginTransaction()
-            val previousDialog = fragmentManager!!.findFragmentByTag("colorPickerDialog")
-            if (previousDialog != null) fragmentTransaction.remove(previousDialog)
-            fragmentTransaction.addToBackStack(null)
             val colorPickerDialogFragment = ColorPickerDialogFragment()
-            colorPickerDialogFragment.show(fragmentTransaction, "colorPickerDialog")
+            colorPickerDialogFragment.setTargetFragment(this, 1)
+            colorPickerDialogFragment.show(fragmentManager!!, "colorPickerDialog")
         }
 
         return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            if(data!!.extras!!.containsKey("colorInt")){
+                val colorInt = data.extras!!.getInt("colorInt")
+                Log.d("HomeFragment Log", "Got color: $colorInt")
+
+                //TODO use this color to set the button background color.
+            }
+        }
     }
 
     private fun checkUsername(username: String) {
