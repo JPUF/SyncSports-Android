@@ -18,6 +18,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
     private val socket = IO.socket("https://syncsport.herokuapp.com/")
+    private val room = "room1"//TODO set this during constructor. Dependent on which room the user chooses.
 
     private val handler = Handler()
     private val timerRunnable: Runnable = run {
@@ -86,8 +87,9 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     private fun connectToChatAPI() {
         Log.d("ChatNetworkLog", "connectToChatAPI Called")
         socket.on(Socket.EVENT_CONNECT) {
-            val usernameString = _username.value
-            socket.emit("username", usernameString)
+            socket.emit("room", room)
+            socket.emit("username", _username.value)
+            socket.emit("room", room)
         }
 
         socket.on("chat_message") { args ->
