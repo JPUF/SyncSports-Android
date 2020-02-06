@@ -13,13 +13,12 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 
-class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
+class ChatViewModel(matchTime: MatchTime, roomName: String, username: String) : ViewModel() {
 
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
     private val socket = IO.socket("https://syncsport.herokuapp.com/")
-    private val room = "room1"//TODO set this during constructor. Dependent on which room the user chooses.
-
+    private val room: String = roomName
     private val handler = Handler()
     private val timerRunnable: Runnable = run {
         Runnable {
@@ -42,24 +41,7 @@ class ChatViewModel(matchTime: MatchTime, username: String) : ViewModel() {
     }
 
 
-    val dummyMessages = listOf(
-        ChatMessage(
-            User("AstroHound", Color.parseColor("#EE0505")),
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent semper varius sem, ac aliquet neque volutpat in. Maecenas magna tellus, viverra egestas gravida id, pulvinar eu velit. Quisque gravida risus nec eros ullamcorper, vitae tincidunt justo convallis. Praesent consectetur sollicitudin feugiat. Fusce id massa vel metus ultricies sodales sed in arcu."
-        ),
-        ChatMessage(
-            User("EightSevenFortyFifteen", Color.parseColor("#05EE05")),
-            "Lorem ipsum dolor sit amet"
-        ),
-        ChatMessage(
-            User("-RainMan500", Color.parseColor("#0505EE")),
-            "Ut lacus purus, suscipit eget purus non, elementum laoreet turpis. Aliquam sit amet tincidunt dolor, eu aliquet mi. Mauris congue eu est non auctor. Ut finibus arcu augue, id vulputate est malesuada sed. Sed non felis maximus, dapibus ante quis, egestas purus. Sed lacinia est magna, a aliquam augue euismod ac. Nullam sed est risus. In blandit maximus eros vitae tincidunt."
-        ),
-        ChatMessage(
-            User("SharmaGurthX", Color.parseColor("#05EEEE")),
-            "Lorem ipsum dolor sit amet"
-        )
-    )
+    val dummyMessages = listOf<ChatMessage>()
 
 
     private val _eventMessageToShow = MutableLiveData<Boolean>()

@@ -36,8 +36,14 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
 
-        binding.dummyCard.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_syncFragment)
+        binding.room1Card.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")
+            findNavController().navigate(action)
+        }
+
+        binding.room2Card.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room2")
+            findNavController().navigate(action)
         }
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!

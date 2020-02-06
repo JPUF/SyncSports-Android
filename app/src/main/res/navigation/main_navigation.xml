@@ -10,9 +10,11 @@
     <fragment android:id="@+id/syncFragment" android:name="com.jlbennett.syncsports.sync.SyncFragment"
               android:label="SyncFragment">
         <action android:id="@+id/action_syncFragment_to_chatFragment" app:destination="@id/chatFragment"/>
+        <argument android:name="roomName" app:argType="string"/>
     </fragment>
     <fragment android:id="@+id/chatFragment" android:name="com.jlbennett.syncsports.chat.ChatFragment"
               android:label="ChatFragment">
         <argument android:name="matchTime" app:argType="com.jlbennett.syncsports.util.MatchTime"/>
+        <argument android:name="roomName" app:argType="string"/>
     </fragment>
 </navigation>

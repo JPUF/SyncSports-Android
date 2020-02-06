@@ -37,7 +37,7 @@ class ChatFragment : Fragment() {
         val persistentUsername = sharedPref.getString(getString(R.string.username_key), "Username")!!
 
         val args: ChatFragmentArgs by navArgs()
-        viewModelFactory = ChatViewModelFactory(args.matchTime, persistentUsername)
+        viewModelFactory = ChatViewModelFactory(args.matchTime, args.roomName, persistentUsername)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
 
         viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->

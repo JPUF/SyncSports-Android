@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.util.State
@@ -25,6 +26,8 @@ class SyncFragment : Fragment() {
         val binding: FragmentSyncBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_sync, container, false
         )
+
+        val args: SyncFragmentArgs by navArgs()
 
         binding.halfPicker.setOnValueChangedListener { _, _, selectedValue ->
             val visibility: Int = when (selectedValue) {
@@ -73,7 +76,7 @@ class SyncFragment : Fragment() {
             }
             val time = MatchTime(matchState, minutes, seconds)
 
-            val action = SyncFragmentDirections.actionSyncFragmentToChatFragment(time)
+            val action = SyncFragmentDirections.actionSyncFragmentToChatFragment(time, args.roomName)
             findNavController().navigate(action)
         }
 
