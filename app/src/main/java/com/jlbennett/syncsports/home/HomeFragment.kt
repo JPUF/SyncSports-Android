@@ -87,13 +87,13 @@ class HomeFragment : Fragment() {
         if (isValidUsername(username)) {
             binding.usernameValidText.text = resources.getString(R.string.valid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorValid))
-            binding.roomHeaderText.visibility = View.VISIBLE
+            binding.roomHeaderText.text = resources.getString(R.string.popular_rooms)
             binding.roomScroll.visibility = View.VISIBLE
             storeUsername(username)
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
-            binding.roomHeaderText.visibility = View.INVISIBLE
+            binding.roomHeaderText.text = resources.getString(R.string.no_user)
             binding.roomScroll.visibility = View.INVISIBLE
         }
     }
