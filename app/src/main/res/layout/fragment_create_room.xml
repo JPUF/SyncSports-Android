@@ -14,5 +14,67 @@
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+        <TextView
+                android:text="Team 1:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/team1_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp" app:layout_constraintTop_toBottomOf="@+id/header_text"
+                android:layout_marginTop="32dp"/>
+        <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/team1_entry"
+                app:layout_constraintTop_toTopOf="@+id/team1_text"
+                app:layout_constraintBottom_toBottomOf="@+id/team1_text"
+                app:layout_constraintStart_toEndOf="@+id/team1_text" android:layout_marginStart="16dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp" android:hint="e.g. Arsenal"/>
+        <TextView
+                android:text="Team 2:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/team2_text"
+                app:layout_constraintTop_toBottomOf="@+id/team1_text" android:layout_marginTop="32dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/team2_entry" app:layout_constraintTop_toTopOf="@+id/team2_text"
+                app:layout_constraintBottom_toBottomOf="@+id/team2_text"
+                app:layout_constraintStart_toEndOf="@+id/team2_text" android:layout_marginStart="16dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+                android:hint="e.g. Newcastle United"/>
+        <Button
+                android:text="Create and Join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/submit_button" android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="16dp"/>
+        <TextView
+                android:text="@string/room_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/room_name_header"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp" android:layout_marginTop="48dp"
+                app:layout_constraintTop_toBottomOf="@+id/team2_text"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/room_name_text" app:layout_constraintStart_toEndOf="@+id/room_name_header"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@+id/room_name_header"
+                app:layout_constraintBottom_toBottomOf="@+id/room_name_header"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

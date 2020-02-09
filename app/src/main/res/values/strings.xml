@@ -17,4 +17,5 @@
     <string name="select_your_color">Select your color:</string>
     <string name="no_user">Enter a username</string>
     <string name="popular_rooms">Popular rooms:</string>
+    <string name="room_name">Room name:</string>
 </resources>
