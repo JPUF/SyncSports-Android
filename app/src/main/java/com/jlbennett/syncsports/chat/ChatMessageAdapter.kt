@@ -1,5 +1,6 @@
 package com.jlbennett.syncsports.chat
 
+import android.graphics.Color
 import android.graphics.Typeface.BOLD
 import android.text.SpannableString
 import android.text.Spanned
@@ -30,7 +31,7 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
         val messageText = holder.messageTextView
 
         val messageSpannableString = SpannableString("${item.user.name}: ${item.message}")
-        messageSpannableString.setSpan(ForegroundColorSpan(item.user.color),0, item.user.name.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        messageSpannableString.setSpan(ForegroundColorSpan(Color.parseColor(item.user.color)),0, item.user.name.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         messageSpannableString.setSpan(StyleSpan(BOLD),0, item.user.name.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         messageText.text = messageSpannableString
     }

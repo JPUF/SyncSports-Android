@@ -1,11 +1,10 @@
 package com.jlbennett.syncsports.chat
 
-import android.graphics.Color
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.os.Handler
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
@@ -13,7 +12,7 @@ import io.socket.client.IO
 import io.socket.client.Socket
 import org.json.JSONObject
 
-class ChatViewModel(matchTime: MatchTime, roomName: String, username: String) : ViewModel() {
+class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewModel() {
 
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
@@ -56,11 +55,11 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, username: String) : 
     val matchTime: LiveData<MatchTime>
         get() = _matchTime
 
-    private val _username = MutableLiveData<String>()
+    private var _user = User("user", "#0B4AB0")
 
     init {
         _matchTime.value = matchTime
-        _username.value = username
+        _user = user
         handler.postDelayed(timerRunnable, 1000)
         _eventMessageToShow.value = false
         connectToChatAPI()
@@ -70,7 +69,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, username: String) : 
         Log.d("ChatNetworkLog", "connectToChatAPI Called")
         socket.on(Socket.EVENT_CONNECT) {
             socket.emit("room", room)
-            socket.emit("username", _username.value)
+            socket.emit("username", _user.name)
             socket.emit("room", room)
         }
 
@@ -80,7 +79,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, username: String) : 
             val username = msgObject.get("username") as String
             val userColor = msgObject.get("color") as String
             val message = msgObject.get("message") as String
-            val chatMessage = ChatMessage((User(username, Color.parseColor(userColor))), message)
+            val chatMessage = ChatMessage((User(username, userColor)), message)
             val timeObject = msgObject.get("user_time") as JSONObject
             val minutes = timeObject.get("minutes") as Int
             val seconds = timeObject.get("seconds") as Int
@@ -127,15 +126,15 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, username: String) : 
 
     fun sendMessage(message: String) {
         val msgObject = JSONObject()
-        msgObject.put("username", _username.value)
-        msgObject.put("color", "#5e0104")//TODO take user input for color
+        msgObject.put("username", _user.name)
+        msgObject.put("color", _user.color)//TODO take user input for color
         msgObject.put("message", message)
         val timeObject = JSONObject()
         timeObject.put("state", _matchTime.value!!.state)
         timeObject.put("minutes", _matchTime.value!!.minutes)
         timeObject.put("seconds", _matchTime.value!!.seconds)
         msgObject.put("user_time", timeObject)
-        Log.d("ChatNetworkLog", "Before emission: ${_username.value} : $message : $timeObject")
+        Log.d("ChatNetworkLog", "Before emission: ${_user.name} : $message : $timeObject")
         socket.emit("chat_message", msgObject)
     }
 

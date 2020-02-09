@@ -13,6 +13,7 @@
     <string name="invalid">Username invalid</string>
     <string name="valid">Username valid</string>
     <string name="username_key">username</string>
+    <string name="color_key">color</string>
     <string name="select_your_color">Select your color:</string>
     <string name="no_user">Enter a username</string>
     <string name="popular_rooms">Popular rooms:</string>

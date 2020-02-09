@@ -1,13 +1,11 @@
 package com.jlbennett.syncsports.home
 
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
@@ -18,16 +16,19 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentHomeBinding
+import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
+
     private lateinit var binding: FragmentHomeBinding
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var username: String
+    private lateinit var color: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,17 +40,23 @@ class HomeFragment : Fragment() {
         binding.room1Card.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")
             findNavController().navigate(action)
+            storeUser(User(username, color))
         }
 
         binding.room2Card.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room2")
             findNavController().navigate(action)
+            storeUser(User(username, color))
         }
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
-        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "")
-        binding.usernameEntry.text = SpannableStringBuilder(persistentUsername)
-        checkUsername(persistentUsername!!)
+        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "user")!!
+        val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
+        username = persistentUsername
+        color = persistentColor
+        binding.usernameEntry.text = SpannableStringBuilder(username)
+        binding.colorButton.background.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY)
+        checkUsername(username)
 
         binding.usernameEntry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -71,16 +78,10 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            if(data!!.extras!!.containsKey("colorInt")){
-                val colorInt = data.extras!!.getInt("colorInt")
-                Log.d("HomeFragment Log", "Got color: $colorInt")
-
-                //TODO use this color to set the button background color.
-            }
-        }
+    override fun onColorSelected(colorString: String) {
+        binding.colorButton.background.setColorFilter(Color.parseColor(colorString), PorterDuff.Mode.MULTIPLY)
+        color = colorString
+        Log.d("HomeFragment Log", "onColorSelected: $color")
     }
 
     private fun checkUsername(username: String) {
@@ -89,7 +90,6 @@ class HomeFragment : Fragment() {
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorValid))
             binding.roomHeaderText.text = resources.getString(R.string.popular_rooms)
             binding.roomScroll.visibility = View.VISIBLE
-            storeUsername(username)
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
@@ -110,9 +110,10 @@ class HomeFragment : Fragment() {
         return true//returns true (valid) if previous checks are passed
     }
 
-    private fun storeUsername(username: String) {
+    private fun storeUser(user: User) {
         val preferenceEditor = sharedPref.edit()
-        preferenceEditor?.putString(getString(R.string.username_key), username)//TODO only call on navigate.
+        preferenceEditor?.putString(getString(R.string.username_key), user.name)
+        preferenceEditor?.putString(getString(R.string.color_key), user.color)
         preferenceEditor?.apply()
     }
 }

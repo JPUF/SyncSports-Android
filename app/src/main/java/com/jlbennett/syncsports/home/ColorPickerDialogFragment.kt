@@ -1,7 +1,5 @@
 package com.jlbennett.syncsports.home
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,20 +25,18 @@ class ColorPickerDialogFragment : DialogFragment() {
     }
 
     private fun setColor(button: View?) {
-        val chosenColor = when (button!!.id) {
-            R.id.blue_button -> R.color.blue
-            R.id.red_button -> R.color.red
-            R.id.orange_button -> R.color.orange
-            R.id.yellow_button -> R.color.yellow
-            R.id.green_button -> R.color.green
-            R.id.purple_button -> R.color.purple
-            else -> R.color.blue
+        val chosenColor : String = when (button!!.id) {
+            R.id.blue_button -> "#0B4AB0"
+            R.id.red_button -> "#910606"
+            R.id.orange_button -> "#DE8100"
+            R.id.yellow_button -> "#DBCA12"
+            R.id.green_button -> "#13AD02"
+            R.id.purple_button -> "#7D02AD"
+            else -> "#0B4AB0"
         }
 
-        val bundle = Bundle()
-        bundle.putInt("colorInt", chosenColor)
-        val intent = Intent().putExtras(bundle)
-        targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+        val listener = targetFragment!! as DialogListener
+        listener.onColorSelected(chosenColor)
 
         dismiss()
     }
@@ -49,5 +45,9 @@ class ColorPickerDialogFragment : DialogFragment() {
         super.onDestroy()
         Log.d("HomeFragment Log", "fragment onDestroy: dismissing")
         dismiss()
+    }
+
+    interface DialogListener {
+        fun onColorSelected(colorString: String)
     }
 }

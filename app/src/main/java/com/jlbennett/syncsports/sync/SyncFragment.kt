@@ -9,11 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.R
-import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.customViews.MinutePicker
 import com.jlbennett.syncsports.databinding.FragmentSyncBinding
+import com.jlbennett.syncsports.util.MatchTime
+import com.jlbennett.syncsports.util.State
 
 
 class SyncFragment : Fragment() {
