@@ -44,9 +44,13 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         }
 
         binding.room2Card.setOnClickListener {
+            storeUser(User(username, color))
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room2")
             findNavController().navigate(action)
-            storeUser(User(username, color))
+        }
+
+        binding.createRoomButton.setOnClickListener {
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToCreateRoomFragment())
         }
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!

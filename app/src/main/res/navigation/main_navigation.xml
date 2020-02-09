@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/main_navigation" app:startDestination="@id/homeFragment">
 
     <fragment android:id="@+id/homeFragment" android:name="com.jlbennett.syncsports.home.HomeFragment"
-              android:label="HomeFragment">
+              android:label="HomeFragment" tools:layout="@layout/fragment_home">
         <action android:id="@+id/action_homeFragment_to_syncFragment" app:destination="@id/syncFragment"/>
+        <action android:id="@+id/action_homeFragment_to_createRoomFragment" app:destination="@id/createRoomFragment"/>
     </fragment>
     <fragment android:id="@+id/syncFragment" android:name="com.jlbennett.syncsports.sync.SyncFragment"
-              android:label="SyncFragment">
+              android:label="SyncFragment" tools:layout="@layout/fragment_sync">
         <action android:id="@+id/action_syncFragment_to_chatFragment" app:destination="@id/chatFragment"/>
         <argument android:name="roomName" app:argType="string"/>
     </fragment>
     <fragment android:id="@+id/chatFragment" android:name="com.jlbennett.syncsports.chat.ChatFragment"
-              android:label="ChatFragment">
+              android:label="ChatFragment" tools:layout="@layout/fragment_chat">
         <argument android:name="matchTime" app:argType="com.jlbennett.syncsports.util.MatchTime"/>
         <argument android:name="roomName" app:argType="string"/>
+    </fragment>
+    <fragment android:id="@+id/createRoomFragment" android:name="com.jlbennett.syncsports.CreateRoomFragment"
+              android:label="CreateRoomFragment" tools:layout="@layout/fragment_create_room">
+        <action android:id="@+id/action_createRoomFragment2_to_syncFragment" app:destination="@id/syncFragment"/>
     </fragment>
 </navigation>
