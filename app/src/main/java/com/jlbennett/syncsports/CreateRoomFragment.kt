@@ -24,7 +24,11 @@ class CreateRoomFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_room, container, false)
 
         binding.team1Entry.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(p0: Editable?) {}
+            override fun afterTextChanged(p0: Editable?) {
+                if(binding.team1Entry.text.isBlank() && binding.team2Entry.text.isBlank()){
+                    binding.roomNameText.text = ""
+                }
+            }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
@@ -36,7 +40,11 @@ class CreateRoomFragment : Fragment() {
         })
 
         binding.team2Entry.addTextChangedListener(object : TextWatcher{
-            override fun afterTextChanged(p0: Editable?) {}
+            override fun afterTextChanged(p0: Editable?) {
+                if(binding.team1Entry.text.isBlank() && binding.team2Entry.text.isBlank()){
+                    binding.roomNameText.text = ""
+                }
+            }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
@@ -48,10 +56,8 @@ class CreateRoomFragment : Fragment() {
         })
 
         binding.submitButton.setOnClickListener {
-            val teams = binding.roomNameText.text.toString().replace(" vs ","")
-            if(teams.isNotBlank()){
+            if(binding.team1Entry.text.isNotBlank() && binding.team2Entry.text.isNotBlank()){
                 //TODO navigate to sync fragment.
-                //further sanity checks (both teams are present)
             } else {
                 Toast.makeText(context, "Please enter a valid room name", Toast.LENGTH_LONG).show()
             }

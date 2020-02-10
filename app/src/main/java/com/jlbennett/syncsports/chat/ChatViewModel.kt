@@ -24,7 +24,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             val state = _matchTime.value!!.state
             var minutes = _matchTime.value!!.minutes
             var seconds = _matchTime.value!!.seconds
-            Log.d("Match Time", "Updating time: $seconds")
+            Log.d("ChatViewModel log", "Updating time: $seconds")
             if (state == State.FIRST_HALF || state == State.SECOND_HALF) {
                 if (seconds < 59) {
                     seconds += 1
@@ -152,7 +152,15 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
         _eventMessageToShow.value = false
     }
 
-    fun stopUpdatingTimer() {
+    //TODO probs need a service to handle the timer. 
+    fun resumeTimer(matchTime: MatchTime) {
+        Log.d("chatLife", "resumeTimer - posting seconds:${matchTime.seconds}.")
+        _matchTime.value = matchTime
+        handler.postDelayed(timerRunnable, 1000)
+    }
+
+    fun pauseTimer() {
+        Log.d("chatLife", "pauseTimer - removing callbacks.")
         handler.removeCallbacks(timerRunnable)
     }
 }

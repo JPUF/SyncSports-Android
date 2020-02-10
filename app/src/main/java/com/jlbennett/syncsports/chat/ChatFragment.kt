@@ -73,6 +73,7 @@ class ChatFragment : Fragment() {
 
             viewModel.sendMessage(chatMessage.toString())
         }
+
         return binding.root
     }
 
@@ -90,7 +91,7 @@ class ChatFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.stopUpdatingTimer()
+        viewModel.pauseTimer()
         viewModel.disconnectFromChatroom()
     }
 }
