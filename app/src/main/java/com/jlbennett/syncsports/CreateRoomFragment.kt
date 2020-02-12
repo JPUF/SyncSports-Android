@@ -4,12 +4,17 @@ package com.jlbennett.syncsports
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.jlbennett.syncsports.databinding.FragmentCreateRoomBinding
 
 
@@ -23,9 +28,9 @@ class CreateRoomFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_room, container, false)
 
-        binding.team1Entry.addTextChangedListener(object : TextWatcher{
+        binding.team1Entry.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                if(binding.team1Entry.text.isBlank() && binding.team2Entry.text.isBlank()){
+                if (binding.team1Entry.text.isBlank() && binding.team2Entry.text.isBlank()) {
                     binding.roomNameText.text = ""
                 }
             }
@@ -39,9 +44,9 @@ class CreateRoomFragment : Fragment() {
             }
         })
 
-        binding.team2Entry.addTextChangedListener(object : TextWatcher{
+        binding.team2Entry.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-                if(binding.team1Entry.text.isBlank() && binding.team2Entry.text.isBlank()){
+                if (binding.team1Entry.text.isBlank() && binding.team2Entry.text.isBlank()) {
                     binding.roomNameText.text = ""
                 }
             }
@@ -56,8 +61,8 @@ class CreateRoomFragment : Fragment() {
         })
 
         binding.submitButton.setOnClickListener {
-            if(binding.team1Entry.text.isNotBlank() && binding.team2Entry.text.isNotBlank()){
-                //TODO navigate to sync fragment.
+            if (binding.team1Entry.text.isNotBlank() && binding.team2Entry.text.isNotBlank()) {
+                postNewRoom(binding.roomNameText.text.toString())
             } else {
                 Toast.makeText(context, "Please enter a valid room name", Toast.LENGTH_LONG).show()
             }
@@ -66,5 +71,18 @@ class CreateRoomFragment : Fragment() {
         return binding.root
     }
 
-
+    private fun postNewRoom(roomName: String) {
+        val queue = Volley.newRequestQueue(activity)
+        val url = "https://syncsport.herokuapp.com/rooms/$roomName"
+        Log.d("POST", "POSTing room: $roomName")
+        val stringRequest = StringRequest(
+            Request.Method.POST, url,
+            Response.Listener<String> { response ->
+                Log.d("POST", "Response is: $response")
+                //TODO navigate to sync fragment.
+            },
+            Response.ErrorListener { Log.d("POST", "HTTP Error") }
+        )
+        queue.add(stringRequest)
+    }
 }
