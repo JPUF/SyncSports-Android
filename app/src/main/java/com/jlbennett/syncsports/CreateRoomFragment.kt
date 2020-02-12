@@ -16,6 +16,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.jlbennett.syncsports.databinding.FragmentCreateRoomBinding
+import org.json.JSONObject
 
 
 class CreateRoomFragment : Fragment() {
@@ -73,15 +74,21 @@ class CreateRoomFragment : Fragment() {
 
     private fun postNewRoom(roomName: String) {
         val queue = Volley.newRequestQueue(activity)
-        val url = "https://syncsport.herokuapp.com/rooms/$roomName"
+        val urlString = "http://syncsport.herokuapp.com/rooms/$roomName".replace(" ", "%20")
         Log.d("POST", "POSTing room: $roomName")
         val stringRequest = StringRequest(
-            Request.Method.POST, url,
+            Request.Method.POST, urlString,
             Response.Listener<String> { response ->
-                Log.d("POST", "Response is: $response")
+                val jsonObject = JSONObject(response)
+                val returnedRoom = jsonObject.getString("roomName")
+                Log.d("POST", "Response is: $returnedRoom")
                 //TODO navigate to sync fragment.
             },
-            Response.ErrorListener { Log.d("POST", "HTTP Error") }
+            Response.ErrorListener { error ->
+                Log.d("POST", "HTTP Error: $error")
+                error.printStackTrace()
+                Toast.makeText(context, "Error creating new room", Toast.LENGTH_LONG).show()
+            }
         )
         queue.add(stringRequest)
     }
