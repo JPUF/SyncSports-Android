@@ -23,6 +23,7 @@ import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
 
 
+@Suppress("DEPRECATION")
 class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
     private lateinit var binding: FragmentHomeBinding
@@ -54,7 +55,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         }
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
-        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "user")!!
+        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "user")!!//TODO handle no username properly
         val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
         username = persistentUsername
         color = persistentColor

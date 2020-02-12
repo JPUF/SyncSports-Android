@@ -1,10 +1,12 @@
 package com.jlbennett.syncsports.chat
 
+import android.content.Context
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
@@ -75,11 +77,12 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
 
         socket.on("chat_message") { args ->
             //TODO cannot receive messages from WebApp. It doesn't send an appropriate MatchTime JSON object.
+            //TODO maybe make the webapp receive messages from all rooms. Send to all.
             val msgObject = args[0] as JSONObject
             val username = msgObject.get("username") as String
             val userColor = msgObject.get("color") as String
             val message = msgObject.get("message") as String
-            val chatMessage = ChatMessage((User(username, userColor)), message)
+
             val timeObject = msgObject.get("user_time") as JSONObject
             val minutes = timeObject.get("minutes") as Int
             val seconds = timeObject.get("seconds") as Int
@@ -92,6 +95,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
                 else -> State.PRE_MATCH
             }
             val incomingMatchTime = MatchTime(state, minutes, seconds)
+            val chatMessage = ChatMessage((User(username, userColor)), message, incomingMatchTime)
             Log.d("ChatNetworkLog", "received: $incomingMatchTime")
             val timeDifference: Long = calculateDifference(incomingMatchTime) * 1000L
             updateMessage(chatMessage, timeDifference)

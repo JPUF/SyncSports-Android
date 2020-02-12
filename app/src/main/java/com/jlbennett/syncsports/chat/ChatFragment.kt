@@ -2,6 +2,7 @@ package com.jlbennett.syncsports.chat
 
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,8 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentChatBinding
+import com.jlbennett.syncsports.util.MatchTime
+import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
 
 
@@ -22,33 +26,31 @@ class ChatFragment : Fragment() {
 
 
     private lateinit var viewModel: ChatViewModel
+    private lateinit var sharedPref: SharedPreferences
     private lateinit var viewModelFactory: ChatViewModelFactory
     private lateinit var recyclerViewAdapter: ChatMessageAdapter
     private lateinit var user: User
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val binding: FragmentChatBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_chat, container, false
         )
 
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
-        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "Username")!!
-        val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
-        Log.d("HomeFragment Log", "is ChatFragment color blue? ${persistentColor == "#0B4AB0"}")
-        user = User(persistentUsername, persistentColor)
-
         val args: ChatFragmentArgs by navArgs()
+        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
+        user = readUser()
         viewModelFactory = ChatViewModelFactory(args.matchTime, args.roomName, user)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
 
         viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
-                    viewModel.receivedMessage.value ?: ChatMessage(User("X", "#000000"), "Error receiving message")
-
+                    viewModel.receivedMessage.value ?: ChatMessage(
+                        User("X", "#000000"),
+                        "Error receiving message",
+                        MatchTime(State.PRE_MATCH, 0, 0)
+                    )
                 displayMessage(chatMessage)
                 viewModel.onDisplayMessageComplete()
             }
@@ -70,7 +72,6 @@ class ChatFragment : Fragment() {
             val chatMessage = binding.inputText.text
             binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
             binding.inputText.setText(R.string.empty)
-
             viewModel.sendMessage(chatMessage.toString())
         }
 
@@ -84,14 +85,30 @@ class ChatFragment : Fragment() {
         }
     }
 
+    private fun readUser(): User {
+        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "Username")!!
+        val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
+        return User(persistentUsername, persistentColor)
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.reconnectToChatroom()
+        val timeJSON = sharedPref.getString("time", null)
+        if(timeJSON != null) {
+            val time: MatchTime = Gson().fromJson(timeJSON, MatchTime::class.java)
+            //TODO Calculate time passed. (between stored and accessed)
+            viewModel.resumeTimer(time)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.pauseTimer()
+
+        val timeJSON = Gson().toJson(viewModel.matchTime.value!!)
+        sharedPref.edit().putString("time", timeJSON).apply()
+
         viewModel.disconnectFromChatroom()
     }
 }
