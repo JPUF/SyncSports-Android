@@ -4,7 +4,6 @@ package com.jlbennett.syncsports.chat
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.jlbennett.syncsports.databinding.FragmentChatBinding
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
+import java.util.*
 
 
 class ChatFragment : Fragment() {
@@ -94,20 +94,30 @@ class ChatFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.reconnectToChatroom()
-        val timeJSON = sharedPref.getString("time", null)
+        val timeJSON = sharedPref.getString("matchTime", null)
+        val timeStored = sharedPref.getLong("timeStored", 0)
         if(timeJSON != null) {
-            val time: MatchTime = Gson().fromJson(timeJSON, MatchTime::class.java)
-            //TODO Calculate time passed. (between stored and accessed)
-            viewModel.resumeTimer(time)
+            val oldMatchTime: MatchTime = Gson().fromJson(timeJSON, MatchTime::class.java)
+            val currentTime = Calendar.getInstance().timeInMillis
+            val elapsed = currentTime - timeStored
+            val elapsedSeconds = (elapsed / 1000).toInt()
+            val elapsedMinutes = elapsedSeconds / 60
+            val matchTime = MatchTime(
+                oldMatchTime.state,//TODO handle state
+                oldMatchTime.minutes + elapsedMinutes,
+                oldMatchTime.seconds + (elapsedSeconds % 60)
+            )
+            viewModel.resumeTimer(matchTime)
         }
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.pauseTimer()
-
+        val timeStored = Calendar.getInstance().timeInMillis
         val timeJSON = Gson().toJson(viewModel.matchTime.value!!)
-        sharedPref.edit().putString("time", timeJSON).apply()
+        sharedPref.edit().putString("matchTime", timeJSON).apply()
+        sharedPref.edit().putLong("timeStored", timeStored).apply()
 
         viewModel.disconnectFromChatroom()
     }

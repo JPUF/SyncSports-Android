@@ -1,6 +1,7 @@
 package com.jlbennett.syncsports.sync
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -75,7 +76,8 @@ class SyncFragment : Fragment() {
                 else -> State.PRE_MATCH
             }
             val time = MatchTime(matchState, minutes, seconds)
-
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
+            sharedPref.edit().putString("matchTime", null).apply()
             val action = SyncFragmentDirections.actionSyncFragmentToChatFragment(time, args.roomName)
             findNavController().navigate(action)
         }
