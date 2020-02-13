@@ -93,17 +93,20 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     }
 
     private fun checkUsername(name: String) {
+        binding.roomHeaderText.visibility = View.VISIBLE
         if (isValidUsername(name)) {
             binding.usernameValidText.text = resources.getString(R.string.valid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorValid))
             binding.roomHeaderText.text = resources.getString(R.string.popular_rooms)
             binding.roomScroll.visibility = View.VISIBLE
+            binding.createRoomButton.visibility = View.VISIBLE
             username = name
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
             binding.roomHeaderText.text = resources.getString(R.string.no_user)
             binding.roomScroll.visibility = View.INVISIBLE
+            binding.createRoomButton.visibility = View.INVISIBLE
         }
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,9 @@ class CreateRoomFragment : Fragment() {
             if (binding.team1Entry.text.isNotBlank() && binding.team2Entry.text.isNotBlank()) {
                 postNewRoom(binding.roomNameText.text.toString())
             } else {
-                Toast.makeText(context, "Please enter a valid room name", Toast.LENGTH_LONG).show()
+                val toast = Toast.makeText(context, "Please enter a valid room name", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.TOP, 0, 128)
+                toast.show()
             }
         }
 
@@ -83,7 +86,9 @@ class CreateRoomFragment : Fragment() {
                 val jsonObject = JSONObject(response)
                 val returnedRoom = jsonObject.getString("roomName")
                 Log.d("POST", "Response is: $returnedRoom")
-                Toast.makeText(context, "Creating new room: $returnedRoom", Toast.LENGTH_LONG).show()
+                val toast = Toast.makeText(context, "Creating new room: $returnedRoom", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.TOP, 0, 128)
+                toast.show()
                 val action = CreateRoomFragmentDirections.actionCreateRoomFragmentToSyncFragment(returnedRoom)
                 findNavController().navigate(action)
             },
