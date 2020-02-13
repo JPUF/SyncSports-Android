@@ -20,6 +20,6 @@
     </fragment>
     <fragment android:id="@+id/createRoomFragment" android:name="com.jlbennett.syncsports.CreateRoomFragment"
               android:label="CreateRoomFragment" tools:layout="@layout/fragment_create_room">
-        <action android:id="@+id/action_createRoomFragment2_to_syncFragment" app:destination="@id/syncFragment"/>
+        <action android:id="@+id/action_createRoomFragment_to_syncFragment" app:destination="@id/syncFragment"/>
     </fragment>
 </navigation>

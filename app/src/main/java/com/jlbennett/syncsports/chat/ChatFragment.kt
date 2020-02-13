@@ -59,9 +59,18 @@ class ChatFragment : Fragment() {
         viewModel.matchTime.observe(this, Observer { updatingMatchTime ->
             val minString = String.format("%02d", updatingMatchTime.minutes)
             val secString = String.format("%02d", updatingMatchTime.seconds)
-            val matchTimeString = "MATCH ${updatingMatchTime.state} -- $minString:$secString"
+            val stateString = when (updatingMatchTime.state) {
+                State.PRE_MATCH -> "Pre-Match"
+                State.FIRST_HALF -> "First Half"
+                State.HALF_TIME -> "Half Time"
+                State.SECOND_HALF -> "Second Half"
+                State.FULL_TIME -> "Full Time"
+            }
+            val matchTimeString = "$stateString — $minString:$secString"
             binding.timeText.text = matchTimeString
         })
+
+        binding.chatroomNameText.text = args.roomName
 
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 

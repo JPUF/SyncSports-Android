@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -82,7 +83,9 @@ class CreateRoomFragment : Fragment() {
                 val jsonObject = JSONObject(response)
                 val returnedRoom = jsonObject.getString("roomName")
                 Log.d("POST", "Response is: $returnedRoom")
-                //TODO navigate to sync fragment.
+                Toast.makeText(context, "Creating new room: $returnedRoom", Toast.LENGTH_LONG).show()
+                val action = CreateRoomFragmentDirections.actionCreateRoomFragmentToSyncFragment(returnedRoom)
+                findNavController().navigate(action)
             },
             Response.ErrorListener { error ->
                 Log.d("POST", "HTTP Error: $error")
