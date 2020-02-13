@@ -1,12 +1,10 @@
 package com.jlbennett.syncsports.chat
 
-import android.content.Context
 import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
@@ -42,7 +40,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     }
 
 
-    val dummyMessages = listOf<ChatMessage>()
+    val messages = listOf<ChatMessage>()
 
 
     private val _eventMessageToShow = MutableLiveData<Boolean>()
@@ -131,7 +129,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     fun sendMessage(message: String) {
         val msgObject = JSONObject()
         msgObject.put("username", _user.name)
-        msgObject.put("color", _user.color)//TODO take user input for color
+        msgObject.put("color", _user.color)
         msgObject.put("message", message)
         val timeObject = JSONObject()
         timeObject.put("state", _matchTime.value!!.state)
@@ -156,7 +154,6 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
         _eventMessageToShow.value = false
     }
 
-    //TODO probs need a service to handle the timer. 
     fun resumeTimer(matchTime: MatchTime) {
         Log.d("chatLife", "resumeTimer - posting seconds:${matchTime.seconds}.")
         _matchTime.value = matchTime

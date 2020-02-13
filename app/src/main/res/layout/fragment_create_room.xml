@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".CreateRoomFragment"
+            tools:context=".createRoom.CreateRoomFragment"
             android:id="@+id/constraintLayout">
         <TextView
                 android:text="@string/create_room"

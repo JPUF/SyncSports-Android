@@ -9,24 +9,28 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentHomeBinding
 import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
+import android.widget.TextView
+import android.widget.LinearLayout
+import com.jlbennett.syncsports.R
 
 
 @Suppress("DEPRECATION")
 class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var viewModel: HomeViewModel
     private lateinit var sharedPref: SharedPreferences
     private lateinit var username: String
     private lateinit var color: String
@@ -37,6 +41,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
         binding.room1Card.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")
@@ -58,7 +63,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
         val persistentUsername = sharedPref.getString(getString(R.string.username_key), null)
         val persistentColor = sharedPref.getString(getString(R.string.color_key), null) ?: "#0B4AB0"
-        if(persistentUsername != null) {
+        if (persistentUsername != null) {
             username = persistentUsername
             binding.usernameEntry.text = SpannableStringBuilder(username)
             checkUsername(username)
@@ -68,7 +73,6 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
         binding.usernameEntry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 checkUsername(p0.toString().trim())
             }
@@ -83,13 +87,28 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             colorPickerDialogFragment.show(fragmentManager!!, "colorPickerDialog")
         }
 
+        viewModel.chatroomName.observe(this, Observer { chatroomName ->
+            addChatroomCard(chatroomName)
+        })
+
         return binding.root
+    }
+
+    private fun addChatroomCard(chatroomName: String?) {
+        //TODO rooms should be displayed with cards
+        //TODO preferably stored in a RecyclerView
+        val chatroomText = TextView(activity)
+        chatroomText.text = chatroomName
+        chatroomText.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.FILL_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        binding.roomLayout.addView(chatroomText)
     }
 
     override fun onColorSelected(colorString: String) {
         binding.colorButton.background.setColorFilter(Color.parseColor(colorString), PorterDuff.Mode.MULTIPLY)
         color = colorString
-        Log.d("HomeFragment Log", "onColorSelected: $color")
     }
 
     private fun checkUsername(name: String) {

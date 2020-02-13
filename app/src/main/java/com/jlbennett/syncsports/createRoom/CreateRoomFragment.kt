@@ -1,4 +1,4 @@
-package com.jlbennett.syncsports
+package com.jlbennett.syncsports.createRoom
 
 
 import android.os.Bundle
@@ -17,6 +17,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentCreateRoomBinding
 import org.json.JSONObject
 
@@ -29,7 +30,8 @@ class CreateRoomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_room, container, false)
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_create_room, container, false)
 
         binding.team1Entry.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
@@ -89,7 +91,10 @@ class CreateRoomFragment : Fragment() {
                 val toast = Toast.makeText(context, "Creating new room: $returnedRoom", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.TOP, 0, 128)
                 toast.show()
-                val action = CreateRoomFragmentDirections.actionCreateRoomFragmentToSyncFragment(returnedRoom)
+                val action =
+                    CreateRoomFragmentDirections.actionCreateRoomFragmentToSyncFragment(
+                        returnedRoom
+                    )
                 findNavController().navigate(action)
             },
             Response.ErrorListener { error ->

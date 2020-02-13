@@ -74,7 +74,7 @@ class ChatFragment : Fragment() {
 
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 
-        recyclerViewAdapter = ChatMessageAdapter(viewModel.dummyMessages)
+        recyclerViewAdapter = ChatMessageAdapter(viewModel.messages)
         binding.chatMessageList.adapter = recyclerViewAdapter
 
         binding.sendButton.setOnClickListener {
