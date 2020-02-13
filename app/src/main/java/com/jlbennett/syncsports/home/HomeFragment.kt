@@ -42,6 +42,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        viewModel.readAllRooms()//TODO need to remove onPause? read onResume?
 
         binding.room1Card.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")

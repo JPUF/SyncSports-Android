@@ -14,14 +14,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application)  {
     private val context = getApplication<Application>().applicationContext
     init {
         Log.d("HomeView", "HomeViewModel Created")
-        readAllRooms()
     }
 
     private val _chatroomName = MutableLiveData<String>()
     val chatroomName: LiveData<String>
         get() = _chatroomName
 
-    private fun readAllRooms() {
+    fun readAllRooms() {
         val queue = Volley.newRequestQueue(context)
         val urlString = "http://syncsport.herokuapp.com/rooms"
         val roomRequest = JsonObjectRequest(Request.Method.GET, urlString,null,
