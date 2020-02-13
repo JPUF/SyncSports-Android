@@ -40,8 +40,8 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
         binding.room1Card.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")
-            findNavController().navigate(action)
             storeUser(User(username, color))
+            findNavController().navigate(action)
         }
 
         binding.room2Card.setOnClickListener {
@@ -51,17 +51,20 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         }
 
         binding.createRoomButton.setOnClickListener {
+            storeUser(User(username, color))
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToCreateRoomFragment())
         }
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
-        val persistentUsername = sharedPref.getString(getString(R.string.username_key), "user")!!//TODO handle no username properly
-        val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
-        username = persistentUsername
+        val persistentUsername = sharedPref.getString(getString(R.string.username_key), null)
+        val persistentColor = sharedPref.getString(getString(R.string.color_key), null) ?: "#0B4AB0"
+        if(persistentUsername != null) {
+            username = persistentUsername
+            binding.usernameEntry.text = SpannableStringBuilder(username)
+            checkUsername(username)
+        }
         color = persistentColor
-        binding.usernameEntry.text = SpannableStringBuilder(username)
         binding.colorButton.background.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY)
-        checkUsername(username)
 
         binding.usernameEntry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -89,12 +92,13 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         Log.d("HomeFragment Log", "onColorSelected: $color")
     }
 
-    private fun checkUsername(username: String) {
-        if (isValidUsername(username)) {
+    private fun checkUsername(name: String) {
+        if (isValidUsername(name)) {
             binding.usernameValidText.text = resources.getString(R.string.valid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorValid))
             binding.roomHeaderText.text = resources.getString(R.string.popular_rooms)
             binding.roomScroll.visibility = View.VISIBLE
+            username = name
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
