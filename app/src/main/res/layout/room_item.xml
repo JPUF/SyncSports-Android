@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                   android:layout_height="wrap_content" android:id="@+id/item_card"
+                                   android:layout_margin="4dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/base_layout">
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" android:id="@+id/name_text" android:layout_weight="9"
+                tools:text="Arsenal FC vs Manchester United" android:padding="16dp" android:textStyle="bold"/>
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent" android:id="@+id/member_text" android:layout_weight="1"
+                tools:text="‍12" android:gravity="center" android:textStyle="italic"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

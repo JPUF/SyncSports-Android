@@ -15,15 +15,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentHomeBinding
+import com.jlbennett.syncsports.util.Chatroom
 import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
-import android.widget.TextView
-import android.widget.LinearLayout
-import com.jlbennett.syncsports.R
 
 
 @Suppress("DEPRECATION")
@@ -32,6 +31,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var sharedPref: SharedPreferences
+    private lateinit var roomAdapter: RoomAdapter
     private lateinit var username: String
     private lateinit var color: String
 
@@ -42,19 +42,27 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        viewModel.readAllRooms()//TODO need to remove onPause? read onResume?
 
+        binding.roomRecycler.layoutManager = LinearLayoutManager(activity)
+        //roomAdapter = RoomAdapter(viewModel.readAllRooms())
+        roomAdapter = RoomAdapter(
+            listOf(
+                Chatroom("Bournemouth vs Spurs", 12),
+                Chatroom("MUFC vs AFC", 10),
+                Chatroom("Sheffield United vs Celtic", 15),
+                Chatroom("Aston Villa vs Stoke", 8)
+            )
+        )
+        roomAdapter.notifyDataSetChanged()
+        binding.roomRecycler.adapter = roomAdapter
+
+        /*
         binding.room1Card.setOnClickListener {
+            storeUser(User(username, color))
             val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")
-            storeUser(User(username, color))
             findNavController().navigate(action)
         }
-
-        binding.room2Card.setOnClickListener {
-            storeUser(User(username, color))
-            val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room2")
-            findNavController().navigate(action)
-        }
+        */
 
         binding.createRoomButton.setOnClickListener {
             storeUser(User(username, color))
@@ -88,23 +96,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             colorPickerDialogFragment.show(fragmentManager!!, "colorPickerDialog")
         }
 
-        viewModel.chatroomName.observe(this, Observer { chatroomName ->
-            addChatroomCard(chatroomName)
-        })
-
         return binding.root
-    }
-
-    private fun addChatroomCard(chatroomName: String?) {
-        //TODO rooms should be displayed with cards
-        //TODO preferably stored in a RecyclerView
-        val chatroomText = TextView(activity)
-        chatroomText.text = chatroomName
-        chatroomText.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.FILL_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        binding.roomLayout.addView(chatroomText)
     }
 
     override fun onColorSelected(colorString: String) {
@@ -118,14 +110,14 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             binding.usernameValidText.text = resources.getString(R.string.valid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorValid))
             binding.roomHeaderText.text = resources.getString(R.string.popular_rooms)
-            binding.roomScroll.visibility = View.VISIBLE
+            binding.roomRecycler.visibility = View.VISIBLE
             binding.createRoomButton.visibility = View.VISIBLE
             username = name
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
             binding.roomHeaderText.text = resources.getString(R.string.no_user)
-            binding.roomScroll.visibility = View.INVISIBLE
+            binding.roomRecycler.visibility = View.INVISIBLE
             binding.createRoomButton.visibility = View.INVISIBLE
         }
     }
