@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,17 +45,16 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
         binding.roomRecycler.layoutManager = LinearLayoutManager(activity)
-        //roomAdapter = RoomAdapter(viewModel.readAllRooms())
-        roomAdapter = RoomAdapter(
-            listOf(
-                Chatroom("Bournemouth vs Spurs", 12),
-                Chatroom("MUFC vs AFC", 10),
-                Chatroom("Sheffield United vs Celtic", 15),
-                Chatroom("Aston Villa vs Stoke", 8)
-            )
-        )
-        roomAdapter.notifyDataSetChanged()
-        binding.roomRecycler.adapter = roomAdapter
+        viewModel.readAllRooms()
+
+        viewModel.eventRoomListPopulated.observe(this, Observer { hasPopulatedRooms ->
+            if(hasPopulatedRooms) {
+                roomAdapter = RoomAdapter(viewModel.roomList.value!!)//May be null, on failed API calls.
+                roomAdapter.notifyDataSetChanged()
+                binding.roomRecycler.adapter = roomAdapter
+                viewModel.onDisplayRoomsComplete()
+            }
+        })
 
         /*
         binding.room1Card.setOnClickListener {
