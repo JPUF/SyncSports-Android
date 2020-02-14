@@ -21,7 +21,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentHomeBinding
-import com.jlbennett.syncsports.util.Chatroom
 import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
 

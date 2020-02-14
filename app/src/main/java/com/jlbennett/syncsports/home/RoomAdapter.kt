@@ -1,10 +1,10 @@
 package com.jlbennett.syncsports.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.util.Chatroom
@@ -20,7 +20,6 @@ class RoomAdapter(rooms: List<Chatroom>) : RecyclerView.Adapter<RoomViewHolder>(
     }
 
     override fun getItemCount(): Int {
-        Log.d("RoomRecycler", "list size = ${roomList.size}")
         return roomList.size
     }
 
@@ -29,20 +28,15 @@ class RoomAdapter(rooms: List<Chatroom>) : RecyclerView.Adapter<RoomViewHolder>(
         val memberCount = roomList[position].memberCount
         holder.nameText.text = name
         holder.memberText.text = "$memberCount"
-        Log.d("RoomRecycler", "recycler name = $name")
+
+        holder.itemView.setOnClickListener { view ->
+            val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment(name)
+            Navigation.findNavController(view).navigate(action)
+        }
     }
 }
 
-class RoomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+class RoomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var nameText: TextView = itemView.findViewById(R.id.name_text)
     var memberText: TextView = itemView.findViewById(R.id.member_text)
-
-    init {
-        itemView.setOnClickListener(this)
-    }
-
-    override fun onClick(view: View?) {
-        Log.d("RoomRecycler", "onClick: name = ${nameText.text}")
-    }
-
 }
