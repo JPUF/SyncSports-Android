@@ -24,10 +24,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     get() = _eventRoomListPopulated
 
     private val _roomList = MutableLiveData<List<Chatroom>>()
-    val roomList: LiveData<List<Chatroom>>//TODO make this non mutable?
+    val roomList: LiveData<List<Chatroom>>
         get() = _roomList
 
-    //TODO can't work like this. It's async.
     fun readAllRooms() {
         val localRoomList = mutableListOf<Chatroom>()
         val queue = Volley.newRequestQueue(context)
@@ -44,7 +43,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         else -> false
                     }
                     Log.d("HomeView", "$roomName : $roomDetails\ncount=$roomMemberCount, public=$roomPublic")
-                    localRoomList.add(Chatroom(roomName, roomMemberCount, roomPublic))//TODO consider ? not !!
+                    localRoomList.add(Chatroom(roomName, roomMemberCount, roomPublic))
                 } while (it.hasNext())
                 _roomList.postValue(localRoomList)
                 _eventRoomListPopulated.postValue(true)
