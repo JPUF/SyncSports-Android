@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,14 +56,6 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             }
         })
 
-        /*
-        binding.room1Card.setOnClickListener {
-            storeUser(User(username, color))
-            val action = HomeFragmentDirections.actionHomeFragmentToSyncFragment("room1")
-            findNavController().navigate(action)
-        }
-        */
-
         binding.createRoomButton.setOnClickListener {
             storeUser(User(username, color))
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToCreateRoomFragment())
@@ -84,7 +77,6 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 checkUsername(p0.toString().trim())
             }
-
             override fun afterTextChanged(p0: Editable?) {}
         })
 
@@ -112,6 +104,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             binding.roomRecycler.visibility = View.VISIBLE
             binding.createRoomButton.visibility = View.VISIBLE
             username = name
+            storeUser(User(username, color))
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
@@ -134,6 +127,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     }
 
     private fun storeUser(user: User) {
+        Log.d("username store", "Storing: ${user.name}")
         val preferenceEditor = sharedPref.edit()
         preferenceEditor?.putString(getString(R.string.username_key), user.name)
         preferenceEditor?.putString(getString(R.string.color_key), user.color)

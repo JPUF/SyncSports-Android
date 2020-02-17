@@ -32,14 +32,14 @@
                 tools:text="Username is valid" android:textColor="@color/colorValid"
         />
         <TextView
-                android:text="@string/popular_rooms"
+                android:text="@string/no_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/room_header_text"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
                 app:layout_constraintTop_toBottomOf="@+id/username_entry" android:layout_marginTop="8dp"
-                tools:visibility="visible" android:visibility="invisible"/>
+                tools:visibility="visible" android:visibility="visible"/>
         <Button
                 android:layout_width="40dp"
                 android:layout_height="40dp" android:id="@+id/color_button"
@@ -63,7 +63,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp" android:id="@+id/room_recycler" tools:listitem="@layout/room_item"
-                android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/create_room_button"/>
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/create_room_button"
+                tools:visibility="visible" android:visibility="invisible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
