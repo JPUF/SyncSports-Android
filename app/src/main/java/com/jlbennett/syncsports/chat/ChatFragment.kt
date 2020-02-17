@@ -49,7 +49,7 @@ class ChatFragment : Fragment() {
                     viewModel.receivedMessage.value ?: ChatMessage(
                         User("X", "#000000"),
                         "Error receiving message",
-                        MatchTime(State.PRE_MATCH, 0, 0)
+                        MatchTime(State.PRE_MATCH, 0, 0, 0)
                     )
                 displayMessage(chatMessage)
                 viewModel.onDisplayMessageComplete()
@@ -105,7 +105,7 @@ class ChatFragment : Fragment() {
         viewModel.reconnectToChatroom()
         val timeJSON = sharedPref.getString("matchTime", null)
         val timeStored = sharedPref.getLong("timeStored", 0)
-        if(timeJSON != null) {
+        if (timeJSON != null) {
             val oldMatchTime: MatchTime = Gson().fromJson(timeJSON, MatchTime::class.java)
             val currentTime = Calendar.getInstance().timeInMillis
             val elapsed = currentTime - timeStored
@@ -114,7 +114,8 @@ class ChatFragment : Fragment() {
             val matchTime = MatchTime(
                 oldMatchTime.state,//TODO handle state
                 oldMatchTime.minutes + elapsedMinutes,
-                oldMatchTime.seconds + (elapsedSeconds % 60)
+                oldMatchTime.seconds + (elapsedSeconds % 60),
+                0
             )
             viewModel.resumeTimer(matchTime)
         }

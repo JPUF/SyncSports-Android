@@ -75,7 +75,7 @@ class SyncFragment : Fragment() {
                 4 -> State.FULL_TIME
                 else -> State.PRE_MATCH
             }
-            val time = MatchTime(matchState, minutes, seconds)
+            val time = MatchTime(matchState, minutes, seconds, 0)
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
             sharedPref.edit().putString("matchTime", null).apply()
             val action = SyncFragmentDirections.actionSyncFragmentToChatFragment(time, args.roomName)

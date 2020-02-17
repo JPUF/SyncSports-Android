@@ -21,21 +21,24 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     private val handler = Handler()
     private val timerRunnable: Runnable = run {
         Runnable {
-            val state = _matchTime.value!!.state
-            var minutes = _matchTime.value!!.minutes
-            var seconds = _matchTime.value!!.seconds
-            Log.d("ChatViewModel log", "Updating time: $seconds")
-            if (state == State.FIRST_HALF || state == State.SECOND_HALF) {
-                if (seconds < 59) {
-                    seconds += 1
-                } else {
-                    minutes += 1
-                    seconds = 0
-                }
+            val localMatchTime = _matchTime.value!!
+            val state = localMatchTime.state
+            var minutes = localMatchTime.minutes
+            var seconds = localMatchTime.seconds
+            var quarterSeconds = localMatchTime.quarterSeconds
+
+            if (quarterSeconds % 4 == 0) {
+                Log.d("ChatViewModel log", "Updating time: $minutes:$seconds.${quarterSeconds * 25}")
+                if (state == State.FIRST_HALF || state == State.SECOND_HALF) {
+                    seconds = (seconds + 1) % 60
+                    if (seconds == 59) {
+                        minutes = (minutes + 1) % 60
+                    }
+                }//TODO handle state here
             }
-            _matchTime.postValue(MatchTime(state, minutes, seconds))
-            handler.postDelayed(timerRunnable, 1000)
-            //TODO include milliseconds (maybe 1/4 seconds?). So it's higher fidelity.
+            quarterSeconds = (quarterSeconds + 1) % 4
+            _matchTime.postValue(MatchTime(state, minutes, seconds, quarterSeconds))
+            handler.postDelayed(timerRunnable, 1000 / 4)
         }
     }
 
@@ -84,7 +87,8 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             val timeObject = msgObject.get("user_time") as JSONObject
             val minutes = timeObject.get("minutes") as Int
             val seconds = timeObject.get("seconds") as Int
-            val state = when(timeObject.get("state")) {
+            val quarterSeconds = timeObject.get("quarter_seconds") as Int
+            val state = when (timeObject.get("state")) {
                 "PRE_MATCH" -> State.PRE_MATCH
                 "FIRST_HALF" -> State.FIRST_HALF
                 "HALF_TIME" -> State.HALF_TIME
@@ -92,25 +96,27 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
                 "FULL_TIME" -> State.FULL_TIME
                 else -> State.PRE_MATCH
             }
-            val incomingMatchTime = MatchTime(state, minutes, seconds)
+            val incomingMatchTime = MatchTime(state, minutes, seconds, quarterSeconds)
             val chatMessage = ChatMessage((User(username, userColor)), message, incomingMatchTime)
             Log.d("ChatNetworkLog", "received: $incomingMatchTime")
-            val timeDifference: Long = calculateDifference(incomingMatchTime) * 1000L
+            val timeDifference: Long = calculateDifferenceInMillis(incomingMatchTime)
             updateMessage(chatMessage, timeDifference)
         }
         socket.connect()
     }
 
-    private fun calculateDifference(incomingMatchTime: MatchTime): Int {
+    private fun calculateDifferenceInMillis(incomingMatchTime: MatchTime): Long {
         //TODO handle different 'states'
         val currentMatchTime = _matchTime.value!!
         var minuteDifference = 0
-        if(incomingMatchTime.minutes > currentMatchTime.minutes) {
-           minuteDifference = incomingMatchTime.minutes - currentMatchTime.minutes
+        if (incomingMatchTime.minutes > currentMatchTime.minutes) {
+            minuteDifference = incomingMatchTime.minutes - currentMatchTime.minutes
         }
         var secondDifference = 60 * minuteDifference
         secondDifference += incomingMatchTime.seconds - currentMatchTime.seconds
-        return if(secondDifference >= 0) secondDifference else 0
+        val millisecondDifference = (secondDifference * 1000L) +
+                ((incomingMatchTime.quarterSeconds - currentMatchTime.quarterSeconds) * 250)
+        return if (millisecondDifference >= 0) millisecondDifference else 0L
 
     }
 
@@ -135,6 +141,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
         timeObject.put("state", _matchTime.value!!.state)
         timeObject.put("minutes", _matchTime.value!!.minutes)
         timeObject.put("seconds", _matchTime.value!!.seconds)
+        timeObject.put("quarter_seconds", _matchTime.value!!.quarterSeconds)
         msgObject.put("user_time", timeObject)
         Log.d("ChatNetworkLog", "Before emission: ${_user.name} : $message : $timeObject")
         socket.emit("chat_message", msgObject)
@@ -145,7 +152,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     }
 
     fun reconnectToChatroom() {
-        if(!socket.connected()){
+        if (!socket.connected()) {
             socket.connect()
         }
     }
