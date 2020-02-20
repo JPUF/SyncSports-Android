@@ -18,4 +18,8 @@
     <string name="no_user">Enter a username</string>
     <string name="popular_rooms">Popular rooms:</string>
     <string name="room_name">Room name:</string>
+    <string name="set">Set</string>
+    <string name="plus5s">+5s</string>
+    <string name="minus5s">-5s</string>
+    <string name="adjust_your_time">Adjust your time:</string>
 </resources>

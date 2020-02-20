@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content" android:layout_margin="8dp">
 
     <TextView
-            android:text="Adjust your time:"
+            android:text="@string/adjust_your_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/header_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" android:gravity="center_horizontal"/>
@@ -14,14 +14,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:id="@+id/button_layout" android:layout_margin="8dp">
         <Button
-                android:text="-5s"
+                android:text="@string/minus5s"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" android:id="@+id/minus5_button" android:layout_weight="1"
                 android:layout_marginStart="4dp" android:layout_marginEnd="4dp"/>
         <Button
-                android:text="+5s"
+                android:text="@string/plus5s"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" android:id="@+id/plus5_button" android:layout_weight="1"
                 android:layout_marginStart="4dp" android:layout_marginEnd="4dp"/>
     </LinearLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/new_time_text" tools:text="New time: 17:51"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" android:gravity="center"/>
+    <Button
+            android:text="@string/set"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/set_button" android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" android:layout_marginTop="4dp" android:layout_marginBottom="8dp"
+            android:layout_gravity="center"/>
 </LinearLayout>

@@ -42,6 +42,8 @@ class ChatFragment : Fragment() {
         user = readUser()
         viewModelFactory = ChatViewModelFactory(args.matchTime, args.roomName, user)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
+        val timeAdjustDialogFragment = TimeAdjustDialogFragment()
+        timeAdjustDialogFragment.setTargetFragment(this, 1)
 
         viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->
             if (hasMessageToShow) {
@@ -68,9 +70,16 @@ class ChatFragment : Fragment() {
             }
             val matchTimeString = "$stateString — $minString:$secString"
             binding.timeButton.text = matchTimeString
+
+            if(timeAdjustDialogFragment.isShown) {
+                timeAdjustDialogFragment.updateTime(updatingMatchTime)
+            }
         })
 
         binding.chatroomNameText.text = args.roomName
+        binding.timeButton.setOnClickListener {
+            timeAdjustDialogFragment.show(fragmentManager!!, "timeAdjustDialog")
+        }
 
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 
