@@ -62,15 +62,17 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         }
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
-        val persistentUsername = sharedPref.getString(getString(R.string.username_key), null)
+
         val persistentColor = sharedPref.getString(getString(R.string.color_key), null) ?: "#0B4AB0"
+        color = persistentColor
+        binding.colorButton.background.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY)
+
+        val persistentUsername = sharedPref.getString(getString(R.string.username_key), null)
         if (persistentUsername != null) {
             username = persistentUsername
             binding.usernameEntry.text = SpannableStringBuilder(username)
             checkUsername(username)
         }
-        color = persistentColor
-        binding.colorButton.background.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY)
 
         binding.usernameEntry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -93,6 +95,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     override fun onColorSelected(colorString: String) {
         binding.colorButton.background.setColorFilter(Color.parseColor(colorString), PorterDuff.Mode.MULTIPLY)
         color = colorString
+        storeColor(color)
     }
 
     private fun checkUsername(name: String) {
@@ -126,11 +129,21 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         return true//returns true (valid) if previous checks are passed
     }
 
+    private fun storeColor(color: String) {
+        val preferenceEditor = sharedPref.edit()
+        preferenceEditor?.putString(getString(R.string.color_key), color)
+        preferenceEditor?.apply()
+    }
+
+    private fun storeName(name: String) {
+        val preferenceEditor = sharedPref.edit()
+        preferenceEditor?.putString(getString(R.string.username_key), name)
+        preferenceEditor?.apply()
+    }
+
     private fun storeUser(user: User) {
         Log.d("username store", "Storing: ${user.name}")
-        val preferenceEditor = sharedPref.edit()
-        preferenceEditor?.putString(getString(R.string.username_key), user.name)
-        preferenceEditor?.putString(getString(R.string.color_key), user.color)
-        preferenceEditor?.apply()
+        storeColor(user.color)
+        storeName(user.name)
     }
 }
