@@ -67,7 +67,7 @@ class ChatFragment : Fragment() {
                 State.FULL_TIME -> "Full Time"
             }
             val matchTimeString = "$stateString — $minString:$secString"
-            binding.timeText.text = matchTimeString
+            binding.timeButton.text = matchTimeString
         })
 
         binding.chatroomNameText.text = args.roomName
