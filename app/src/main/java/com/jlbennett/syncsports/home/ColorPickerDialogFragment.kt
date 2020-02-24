@@ -1,7 +1,6 @@
 package com.jlbennett.syncsports.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +42,6 @@ class ColorPickerDialogFragment : DialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("HomeFragment Log", "fragment onDestroy: dismissing")
         dismiss()
     }
 

@@ -22,8 +22,7 @@ import com.jlbennett.syncsports.util.User
 import java.util.*
 
 
-class ChatFragment : Fragment() {
-
+class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
 
     private lateinit var viewModel: ChatViewModel
     private lateinit var sharedPref: SharedPreferences
@@ -107,6 +106,10 @@ class ChatFragment : Fragment() {
         val persistentUsername = sharedPref.getString(getString(R.string.username_key), "Username")!!
         val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
         return User(persistentUsername, persistentColor)
+    }
+
+    override fun onTimeSet(matchTime: MatchTime) {
+        viewModel.updateMatchTime(matchTime)
     }
 
     override fun onResume() {

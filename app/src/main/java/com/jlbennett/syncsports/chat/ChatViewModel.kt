@@ -171,4 +171,8 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
         Log.d("chatLife", "pauseTimer - removing callbacks.")
         handler.removeCallbacks(timerRunnable)
     }
+
+    fun updateMatchTime(matchTime: MatchTime) {
+        _matchTime.value = matchTime
+    }
 }
