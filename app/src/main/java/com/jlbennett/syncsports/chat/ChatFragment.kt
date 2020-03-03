@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -40,11 +40,11 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
         user = readUser()
         viewModelFactory = ChatViewModelFactory(args.matchTime, args.roomName, user)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChatViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
         val timeAdjustDialogFragment = TimeAdjustDialogFragment()
         timeAdjustDialogFragment.setTargetFragment(this, 1)
 
-        viewModel.eventMessageToShow.observe(this, Observer { hasMessageToShow ->
+        viewModel.eventMessageToShow.observe(viewLifecycleOwner, Observer { hasMessageToShow ->
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
                     viewModel.receivedMessage.value ?: ChatMessage(
@@ -57,7 +57,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             }
         })
 
-        viewModel.matchTime.observe(this, Observer { updatingMatchTime ->
+        viewModel.matchTime.observe(viewLifecycleOwner, Observer { updatingMatchTime ->
             val minString = String.format("%02d", updatingMatchTime.minutes)
             val secString = String.format("%02d", updatingMatchTime.seconds)
             val stateString = when (updatingMatchTime.state) {
@@ -77,7 +77,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
 
         binding.chatroomNameText.text = args.roomName
         binding.timeButton.setOnClickListener {
-            timeAdjustDialogFragment.show(fragmentManager!!, "timeAdjustDialog")
+            timeAdjustDialogFragment.show(parentFragmentManager, "timeAdjustDialog")
         }
 
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager

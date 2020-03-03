@@ -19,7 +19,7 @@
                     android:id="@+id/chatroom_name_text"
                     android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp" tools:text="Chat Room Name" android:textStyle="bold|italic"
-                    android:layout_weight="1.5" android:gravity="start|center_vertical"/>
+                    android:layout_weight="1.5" android:gravity="start|center_vertical" android:textSize="18sp"/>
             <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
                     android:layout_marginTop="16dp"
                     app:icon="@drawable/ic_pause_black_24dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                    android:layout_marginEnd="16dp" android:layout_weight="1" tools:text="Second Half \n13:42"/>
+                    android:layout_marginEnd="16dp" android:layout_weight="1" tools:text="2nd Half\n13:42"/>
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="0dp"
@@ -49,12 +49,18 @@
                 app:layout_constraintBottom_toBottomOf="@+id/send_button"
                 tools:ignore="Autofill"/>
         <Button
-                android:text="@string/send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/send_button"
+                app:icon="@drawable/ic_send_black_24dp"
+                app:iconPadding="0dp"
+                app:iconGravity="textStart"
+                android:insetLeft="8dp" android:insetRight="8dp"
+                android:insetTop="4dp" android:insetBottom="4dp"
+                style="@style/Widget.MaterialComponents.Button.Icon"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

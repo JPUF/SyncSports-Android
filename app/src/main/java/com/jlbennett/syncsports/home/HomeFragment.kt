@@ -17,7 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jlbennett.syncsports.R
@@ -26,7 +26,6 @@ import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
 
 
-@Suppress("DEPRECATION")
 class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
     private lateinit var binding: FragmentHomeBinding
@@ -42,12 +41,12 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         binding.roomRecycler.layoutManager = LinearLayoutManager(activity)
         viewModel.readAllRooms()
 
-        viewModel.eventRoomListPopulated.observe(this, Observer { hasPopulatedRooms ->
+        viewModel.eventRoomListPopulated.observe(viewLifecycleOwner, Observer { hasPopulatedRooms ->
             if(hasPopulatedRooms) {
                 roomAdapter = RoomAdapter(viewModel.roomList.value!!)//May be null, on failed API calls.
                 roomAdapter.notifyDataSetChanged()
@@ -83,11 +82,11 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             }
             override fun afterTextChanged(p0: Editable?) {}
         })
-        
+
         binding.colorButton.setOnClickListener {
             val colorPickerDialogFragment = ColorPickerDialogFragment()
             colorPickerDialogFragment.setTargetFragment(this, 1)
-            colorPickerDialogFragment.show(fragmentManager!!, "colorPickerDialog")
+            colorPickerDialogFragment.show(parentFragmentManager, "colorPickerDialog")
         }
         return binding.root
     }
