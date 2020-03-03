@@ -3,8 +3,6 @@ package com.jlbennett.syncsports.home
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -33,7 +31,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var roomAdapter: RoomAdapter
     private lateinit var username: String
-    private lateinit var color: String
+    private var color: Int = R.color.blue
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,11 +60,9 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
 
-        val persistentColor = sharedPref.getString(getString(R.string.color_key), null) ?: "#0B4AB0"
+        val persistentColor = sharedPref.getInt(getString(R.string.color_key), R.color.blue)
         color = persistentColor
-        binding.colorButton.background.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY)
-        //TODO colour set doesn't work
-
+        binding.colorButton.backgroundTintList = ContextCompat.getColorStateList(context!!, color)
 
         val persistentUsername = sharedPref.getString(getString(R.string.username_key), null)
         if (persistentUsername != null) {
@@ -91,10 +87,10 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         return binding.root
     }
 
-    override fun onColorSelected(colorString: String) {
-        binding.colorButton.background.setColorFilter(Color.parseColor(colorString), PorterDuff.Mode.MULTIPLY)
-        //TODO colour set doesn't work
-        color = colorString
+    override fun onColorSelected(colorID: Int) {
+        Log.d("userColor", "selected colour: $colorID")
+        binding.colorButton.backgroundTintList = ContextCompat.getColorStateList(context!!, colorID)
+        color = colorID
         storeColor(color)
     }
 
@@ -129,9 +125,9 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         return true//returns true (valid) if previous checks are passed
     }
 
-    private fun storeColor(color: String) {
+    private fun storeColor(colorID: Int) {
         val preferenceEditor = sharedPref.edit()
-        preferenceEditor?.putString(getString(R.string.color_key), color)
+        preferenceEditor?.putInt(getString(R.string.color_key), colorID)
         preferenceEditor?.apply()
     }
 

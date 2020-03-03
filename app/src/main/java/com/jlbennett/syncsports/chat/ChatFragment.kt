@@ -48,7 +48,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
                     viewModel.receivedMessage.value ?: ChatMessage(
-                        User("X", "#000000"),
+                        User("X", R.color.blue),
                         "Error receiving message",
                         MatchTime(State.PRE_MATCH, 0, 0, 0)
                     )
@@ -104,7 +104,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
 
     private fun readUser(): User {
         val persistentUsername = sharedPref.getString(getString(R.string.username_key), "Username")!!
-        val persistentColor = sharedPref.getString(getString(R.string.color_key), "#0B4AB0")!!
+        val persistentColor = sharedPref.getInt(getString(R.string.color_key), R.color.blue)
         return User(persistentUsername, persistentColor)
     }
 

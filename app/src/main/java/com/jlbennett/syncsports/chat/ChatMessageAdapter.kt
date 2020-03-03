@@ -30,8 +30,23 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
         val item = data[position]
         val messageText = holder.messageTextView
 
+        val colorString = when (item.user.color) {
+            R.color.blue -> "#0B4AB0"
+            R.color.red -> "#910606"
+            R.color.orange -> "#DE8100"
+            R.color.yellow -> "#DBCA12"
+            R.color.green -> "#13AD02"
+            R.color.purple -> "#7D02AD"
+            else -> "#0B4AB0"
+        }
+
         val messageSpannableString = SpannableString("${item.user.name}: ${item.message}")
-        messageSpannableString.setSpan(ForegroundColorSpan(Color.parseColor(item.user.color)),0, item.user.name.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        messageSpannableString.setSpan(
+            ForegroundColorSpan(Color.parseColor(colorString)),
+            0,
+            item.user.name.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         messageSpannableString.setSpan(StyleSpan(BOLD),0, item.user.name.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         messageText.text = messageSpannableString
     }

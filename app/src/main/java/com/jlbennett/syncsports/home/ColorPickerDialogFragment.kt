@@ -24,18 +24,18 @@ class ColorPickerDialogFragment : DialogFragment() {
     }
 
     private fun setColor(button: View?) {
-        val chosenColor : String = when (button!!.id) {
-            R.id.blue_button -> "#0B4AB0"
-            R.id.red_button -> "#910606"
-            R.id.orange_button -> "#DE8100"
-            R.id.yellow_button -> "#DBCA12"
-            R.id.green_button -> "#13AD02"
-            R.id.purple_button -> "#7D02AD"
-            else -> "#0B4AB0"
+        val chosenColorID : Int = when (button!!.id) {
+            R.id.blue_button -> R.color.blue
+            R.id.red_button -> R.color.red
+            R.id.orange_button -> R.color.orange
+            R.id.yellow_button -> R.color.yellow
+            R.id.green_button -> R.color.green
+            R.id.purple_button -> R.color.purple
+            else -> R.color.blue
         }
 
         val listener = targetFragment!! as DialogListener
-        listener.onColorSelected(chosenColor)
+        listener.onColorSelected(chosenColorID)
 
         dismiss()
     }
@@ -46,6 +46,6 @@ class ColorPickerDialogFragment : DialogFragment() {
     }
 
     interface DialogListener {
-        fun onColorSelected(colorString: String)
+        fun onColorSelected(colorID: Int)
     }
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
@@ -58,7 +59,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     val matchTime: LiveData<MatchTime>
         get() = _matchTime
 
-    private var _user = User("user", "#0B4AB0")
+    private var _user = User("user", R.color.blue)
 
     init {
         _matchTime.value = matchTime
@@ -81,7 +82,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             //TODO maybe make the webapp receive messages from all rooms. Send to all.
             val msgObject = args[0] as JSONObject
             val username = msgObject.get("username") as String
-            val userColor = msgObject.get("color") as String
+            val userColor = msgObject.get("color") as Int
             val message = msgObject.get("message") as String
 
             val timeObject = msgObject.get("user_time") as JSONObject
