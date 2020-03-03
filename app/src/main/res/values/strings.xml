@@ -22,4 +22,6 @@
     <string name="plus5s">+5s</string>
     <string name="minus5s">-5s</string>
     <string name="adjust_your_time">Adjust your time:</string>
+    <string name="minus1">-1s</string>
+    <string name="plus1">+1s</string>
 </resources>

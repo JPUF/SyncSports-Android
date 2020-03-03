@@ -11,23 +11,28 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" android:gravity="center_horizontal"/>
     <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            style="?android:attr/buttonBarStyle"
             android:layout_height="match_parent" android:id="@+id/button_layout" android:layout_margin="8dp">
         <Button
                 android:text="@string/minus5s"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" android:id="@+id/minus5_button" android:layout_weight="1"
                 android:layout_marginStart="4dp" android:layout_marginEnd="4dp"/>
         <Button
-                android:text="-1s"
+                android:text="@string/minus1"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" android:id="@+id/minus1_button" android:layout_weight="1"/>
         <Button
-                android:text="+1s"
+                android:text="@string/plus1"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" android:id="@+id/plus1_button" android:layout_weight="1"/>
         <Button
                 android:text="@string/plus5s"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" android:id="@+id/plus5_button" android:layout_weight="1"
                 android:layout_marginStart="4dp" android:layout_marginEnd="4dp"/>
@@ -38,8 +43,8 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large" android:gravity="center"/>
     <Button
             android:text="@string/set"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/set_button" android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" android:layout_marginTop="4dp" android:layout_marginBottom="8dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 </LinearLayout>

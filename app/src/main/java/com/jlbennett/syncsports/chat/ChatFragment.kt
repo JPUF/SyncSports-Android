@@ -62,12 +62,12 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             val secString = String.format("%02d", updatingMatchTime.seconds)
             val stateString = when (updatingMatchTime.state) {
                 State.PRE_MATCH -> "Pre-Match"
-                State.FIRST_HALF -> "First Half"
+                State.FIRST_HALF -> "1st Half"
                 State.HALF_TIME -> "Half Time"
-                State.SECOND_HALF -> "Second Half"
+                State.SECOND_HALF -> "2nd Half"
                 State.FULL_TIME -> "Full Time"
             }
-            val matchTimeString = "$stateString — $minString:$secString"
+            val matchTimeString = "$stateString\n$minString:$secString"
             binding.timeButton.text = matchTimeString
 
             if(timeAdjustDialogFragment.dialogIsShown && !timeAdjustDialogFragment.timeIsUpdated) {

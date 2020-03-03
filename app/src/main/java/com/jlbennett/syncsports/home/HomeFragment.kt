@@ -66,6 +66,8 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         val persistentColor = sharedPref.getString(getString(R.string.color_key), null) ?: "#0B4AB0"
         color = persistentColor
         binding.colorButton.background.setColorFilter(Color.parseColor(color), PorterDuff.Mode.MULTIPLY)
+        //TODO colour set doesn't work
+
 
         val persistentUsername = sharedPref.getString(getString(R.string.username_key), null)
         if (persistentUsername != null) {
@@ -81,19 +83,18 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             }
             override fun afterTextChanged(p0: Editable?) {}
         })
-
-
+        
         binding.colorButton.setOnClickListener {
             val colorPickerDialogFragment = ColorPickerDialogFragment()
             colorPickerDialogFragment.setTargetFragment(this, 1)
             colorPickerDialogFragment.show(fragmentManager!!, "colorPickerDialog")
         }
-
         return binding.root
     }
 
     override fun onColorSelected(colorString: String) {
         binding.colorButton.background.setColorFilter(Color.parseColor(colorString), PorterDuff.Mode.MULTIPLY)
+        //TODO colour set doesn't work
         color = colorString
         storeColor(color)
     }
