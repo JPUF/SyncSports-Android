@@ -70,7 +70,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             val matchTimeString = "$stateString — $minString:$secString"
             binding.timeButton.text = matchTimeString
 
-            if(timeAdjustDialogFragment.isShown) {
+            if(timeAdjustDialogFragment.dialogIsShown && !timeAdjustDialogFragment.timeIsUpdated) {
                 timeAdjustDialogFragment.updateTime(updatingMatchTime)
             }
         })

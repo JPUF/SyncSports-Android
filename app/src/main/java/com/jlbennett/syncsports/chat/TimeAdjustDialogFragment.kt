@@ -1,6 +1,7 @@
 package com.jlbennett.syncsports.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,8 @@ import com.jlbennett.syncsports.util.State
 
 class TimeAdjustDialogFragment : DialogFragment() {
 
-    var isShown: Boolean = false
+    var dialogIsShown: Boolean = false
+    var timeIsUpdated: Boolean = false
 
     private lateinit var newTimeText: TextView
     private var currentTime = MatchTime(State.PRE_MATCH, 0, 0, 0)
@@ -21,7 +23,7 @@ class TimeAdjustDialogFragment : DialogFragment() {
     private var adjustmentSeconds = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        isShown = true
+        dialogIsShown = true
         val view = inflater.inflate(R.layout.time_adjust, container, false)
         view.findViewById<Button>(R.id.plus1_button).setOnClickListener { setAdjustment(R.id.plus1_button) }
         view.findViewById<Button>(R.id.plus5_button).setOnClickListener { setAdjustment(R.id.plus5_button) }
@@ -40,20 +42,25 @@ class TimeAdjustDialogFragment : DialogFragment() {
             R.id.plus5_button -> adjustmentSeconds + 5
             else -> 0
         }
+        updateTime()
     }
 
-    fun updateTime(matchTime: MatchTime) {
-        currentTime = matchTime
+    fun updateTime(matchTime: MatchTime? = null) {
+        if (matchTime != null) {
+            currentTime = matchTime
+        }
         adjustedTime = MatchTime(
             currentTime.state,
             currentTime.minutes + ((currentTime.seconds + adjustmentSeconds) / 60),
             (currentTime.seconds + adjustmentSeconds) % 60,
             currentTime.quarterSeconds
         )
+        Log.d("timeAdjust", "seconds: $adjustmentSeconds")
         val minString = String.format("%02d", adjustedTime.minutes)
         val secString = String.format("%02d", adjustedTime.seconds)
         val matchTimeString = "New time — $minString:$secString"
         newTimeText.text = matchTimeString
+        timeIsUpdated = true
     }
 
     private fun timeSet() {
@@ -63,7 +70,8 @@ class TimeAdjustDialogFragment : DialogFragment() {
     }
 
     override fun onDestroyView() {
-        isShown = false
+        dialogIsShown = false
+        timeIsUpdated = false
         super.onDestroyView()
         adjustmentSeconds = 0
         dismiss()
