@@ -24,4 +24,5 @@
     <string name="adjust_your_time">Adjust your time:</string>
     <string name="minus1">-1s</string>
     <string name="plus1">+1s</string>
+    <string name="no_rooms">No rooms yet, create one!</string>
 </resources>

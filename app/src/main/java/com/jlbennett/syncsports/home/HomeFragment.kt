@@ -45,11 +45,12 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         viewModel.readAllRooms()
 
         viewModel.eventRoomListPopulated.observe(viewLifecycleOwner, Observer { hasPopulatedRooms ->
-            if(hasPopulatedRooms) {
+            if (hasPopulatedRooms) {
                 roomAdapter = RoomAdapter(viewModel.roomList.value!!)//May be null, on failed API calls.
                 roomAdapter.notifyDataSetChanged()
                 binding.roomRecycler.adapter = roomAdapter
                 viewModel.onDisplayRoomsComplete()
+                setRoomHeader(R.string.popular_rooms)
             }
         })
 
@@ -76,6 +77,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 checkUsername(p0.toString().trim())
             }
+
             override fun afterTextChanged(p0: Editable?) {}
         })
 
@@ -94,12 +96,23 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         storeColor(color)
     }
 
+    private fun setRoomHeader(stringID: Int){
+        Log.d("room", "setting RoomHeader")
+        if(viewModel.getRoomCount() == 0){
+            Log.d("room", "setting RoomHeader - no rooms")
+            binding.roomHeaderText.text = getString(R.string.no_rooms)
+        } else {
+            binding.roomHeaderText.text = getString(stringID)
+        }
+    }
+
     private fun checkUsername(name: String) {
         binding.roomHeaderText.visibility = View.VISIBLE
         if (isValidUsername(name)) {
             binding.usernameValidText.text = resources.getString(R.string.valid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorValid))
-            binding.roomHeaderText.text = resources.getString(R.string.popular_rooms)
+            //binding.roomHeaderText.text =  resources.getString(R.string.popular_rooms)
+            setRoomHeader(R.string.popular_rooms)
             binding.roomRecycler.visibility = View.VISIBLE
             binding.createRoomButton.visibility = View.VISIBLE
             username = name
@@ -107,7 +120,8 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         } else {
             binding.usernameValidText.text = resources.getString(R.string.invalid)
             binding.usernameValidText.setTextColor(ContextCompat.getColor(context!!, R.color.colorInvalid))
-            binding.roomHeaderText.text = resources.getString(R.string.no_user)
+            //binding.roomHeaderText.text = resources.getString(R.string.no_user)
+            setRoomHeader(R.string.no_user)
             binding.roomRecycler.visibility = View.INVISIBLE
             binding.createRoomButton.visibility = View.INVISIBLE
         }

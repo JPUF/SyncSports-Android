@@ -55,6 +55,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         queue.add(roomRequest)
     }
 
+    fun getRoomCount(): Int {
+        return _roomList.value?.size ?: 0
+    }
+
     fun onDisplayRoomsComplete() {
         _eventRoomListPopulated.value = false
     }
