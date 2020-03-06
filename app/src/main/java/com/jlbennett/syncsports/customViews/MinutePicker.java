@@ -2,10 +2,10 @@ package com.jlbennett.syncsports.customViews;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.NumberPicker;
+import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 
-public class MinutePicker extends NumberPicker {
+public class MinutePicker extends NumberPickerView {
 
     public static final String[] FIRST_HALF_MINUTES = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11",
             "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28",
@@ -32,7 +32,6 @@ public class MinutePicker extends NumberPicker {
     }
 
     private void init() {
-
         setWrapSelectorWheel(true);
         setDisplayedValues(FIRST_HALF_MINUTES);
         setMinValue(0);

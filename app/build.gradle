@@ -49,4 +49,5 @@ dependencies {
     implementation('io.socket:socket.io-client:1.0.0') {
         exclude group: 'org.json', module: 'json'//json already provided by Android
     }
+    implementation 'cn.carbswang.android:NumberPickerView:1.2.0'//Number picker for sync, to allow for changed friction
 }

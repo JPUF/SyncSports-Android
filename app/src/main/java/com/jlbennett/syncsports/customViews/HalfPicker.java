@@ -2,9 +2,9 @@ package com.jlbennett.syncsports.customViews;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.NumberPicker;
+import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
-public class HalfPicker extends NumberPicker {
+public class HalfPicker extends NumberPickerView {
     public HalfPicker(Context context) {
         super(context);
         init();
@@ -23,8 +23,9 @@ public class HalfPicker extends NumberPicker {
     private void init() {
         setWrapSelectorWheel(false);
         final String[] matchStates = {"Pre-Match", "1st Half", "Half Time", "2nd Half", "Full Time"};
+        setDisplayedValues(matchStates);
         setMinValue(0);
         setMaxValue(matchStates.length - 1);
-        setDisplayedValues(matchStates);
+        setFriction(0.03f);
     }
 }
