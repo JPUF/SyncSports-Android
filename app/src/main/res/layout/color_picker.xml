@@ -15,15 +15,15 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/red_button" android:layout_weight="1"
-                android:backgroundTint="@color/red"/>
+                android:backgroundTint="@color/red" android:layout_margin="4dp"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/orange_button" android:layout_weight="1"
-                android:backgroundTint="@color/orange"/>
+                android:backgroundTint="@color/orange" android:layout_margin="4dp"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/green_button" android:layout_weight="1"
-                android:backgroundTint="@color/green"/>
+                android:backgroundTint="@color/green" android:layout_margin="4dp"/>
     </LinearLayout>
     <LinearLayout
             android:orientation="horizontal"
@@ -32,14 +32,14 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/purple_button" android:layout_weight="1"
-                android:backgroundTint="@color/purple"/>
+                android:backgroundTint="@color/purple" android:layout_margin="4dp"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/blue_button" android:layout_weight="1"
-                android:backgroundTint="@color/blue"/>
+                android:backgroundTint="@color/blue" android:layout_margin="4dp"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/yellow_button" android:layout_weight="1"
-                android:backgroundTint="@color/yellow"/>
+                android:backgroundTint="@color/yellow" android:layout_margin="4dp"/>
     </LinearLayout>
 </LinearLayout>
