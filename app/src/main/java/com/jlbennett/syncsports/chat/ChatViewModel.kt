@@ -18,6 +18,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
     private val socket = IO.socket("http://syncsport.herokuapp.com/")
+    private val chatSocket = IO.socket("http://syncsport.herokuapp.com/chat")
     private val room: String = roomName
     private val handler = Handler()
     private val timerRunnable: Runnable = run {
@@ -71,13 +72,14 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
 
     private fun connectToChatAPI() {
         Log.d("ChatNetworkLog", "connectToChatAPI Called")
-        socket.on(Socket.EVENT_CONNECT) {
-            socket.emit("room", room)
-            socket.emit("username", _user.name)
-            socket.emit("room", room)
+
+        chatSocket.on(Socket.EVENT_CONNECT) {
+            chatSocket.emit("room", room)
+            chatSocket.emit("username", _user.name)
+            chatSocket.emit("room", room)
         }
 
-        socket.on("chat_message") { args ->
+        chatSocket.on("chat_message") { args ->
             //TODO cannot receive messages from WebApp. It doesn't send an appropriate MatchTime JSON object.
             //TODO maybe make the webapp receive messages from all rooms. Send to all.
             val msgObject = args[0] as JSONObject
@@ -103,7 +105,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             val timeDifference: Long = calculateDifferenceInMillis(incomingMatchTime)
             updateMessage(chatMessage, timeDifference)
         }
-        socket.connect()
+        chatSocket.connect()
     }
 
     private fun calculateDifferenceInMillis(incomingMatchTime: MatchTime): Long {
@@ -145,16 +147,16 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
         timeObject.put("quarter_seconds", _matchTime.value!!.quarterSeconds)
         msgObject.put("user_time", timeObject)
         Log.d("ChatNetworkLog", "Before emission: ${_user.name} : $message : $timeObject")
-        socket.emit("chat_message", msgObject)
+        chatSocket.emit("chat_message", msgObject)
     }
 
     fun disconnectFromChatroom() {
-        socket.disconnect()
+        chatSocket.disconnect()
     }
 
     fun reconnectToChatroom() {
-        if (!socket.connected()) {
-            socket.connect()
+        if (!chatSocket.connected()) {
+            chatSocket.connect()
         }
     }
 
