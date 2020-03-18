@@ -17,7 +17,6 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
 
     //private val socket = IO.socket("http://192.168.122.1:4000")
     //private val socket = IO.socket("http://10.0.2.2:4000/")//change emulator proxy settings (settings/proxy)
-    private val socket = IO.socket("http://syncsport.herokuapp.com/")
     private val chatSocket = IO.socket("http://syncsport.herokuapp.com/chat")
     private val room: String = roomName
     private val handler = Handler()

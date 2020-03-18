@@ -42,7 +42,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         binding.roomRecycler.layoutManager = LinearLayoutManager(activity)
-        viewModel.readAllRooms()
+        //viewModel.readAllRooms()
 
         viewModel.eventRoomListPopulated.observe(viewLifecycleOwner, Observer { hasPopulatedRooms ->
             if (hasPopulatedRooms) {
@@ -94,6 +94,16 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
         binding.colorButton.backgroundTintList = ContextCompat.getColorStateList(context!!, colorID)
         color = colorID
         storeColor(color)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.disconnectFromRooms()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.reconnectToRooms()
     }
 
     private fun setRoomHeader(stringID: Int){
