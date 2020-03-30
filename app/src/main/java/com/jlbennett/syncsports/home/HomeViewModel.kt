@@ -27,22 +27,26 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         roomSocket.on("room_response") {args ->
-            val roomsObject = args[0] as JSONObject
-            Log.d("HomeView", "in room_response: #${roomsObject.length()}" )
-
             val localRoomList = mutableListOf<Chatroom>()
-            val it = roomsObject.keys()
-            do {
-                val roomName = it.next()
-                val roomDetails = roomsObject.get(roomName) as JSONObject
-                val roomMemberCount = roomDetails.get("member_count") as Int
-                val roomPublic = when (roomDetails.get("public")) {//Maybe cast 'as Boolean'
-                    "true" -> true
-                    else -> false
-                }
-                Log.d("HomeView", "$roomName : $roomDetails\ncount=$roomMemberCount, public=$roomPublic")
-                localRoomList.add(Chatroom(roomName, roomMemberCount, roomPublic))
-            } while (it.hasNext())
+            val roomsObject = args[0] as JSONObject?
+            if(roomsObject == null){
+                Log.d("HomeView", "in room_response: #0" )
+            } else {
+                Log.d("HomeView", "in room_response: #${roomsObject.length()}" )
+
+                val it = roomsObject.keys()
+                do {
+                    val roomName = it.next()
+                    val roomDetails = roomsObject.get(roomName) as JSONObject
+                    val roomMemberCount = roomDetails.get("member_count") as Int
+                    val roomPublic = when (roomDetails.get("public")) {//Maybe cast 'as Boolean'
+                        "true" -> true
+                        else -> false
+                    }
+                    Log.d("HomeView", "$roomName : $roomDetails\ncount=$roomMemberCount, public=$roomPublic")
+                    localRoomList.add(Chatroom(roomName, roomMemberCount, roomPublic))
+                } while (it.hasNext())
+            }
             _roomList.postValue(localRoomList)
             _eventRoomListPopulated.postValue(true)
         }
