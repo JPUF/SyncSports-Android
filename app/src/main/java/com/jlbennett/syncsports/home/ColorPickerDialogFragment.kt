@@ -8,9 +8,16 @@ import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import com.jlbennett.syncsports.R
 
+/**
+ * The logic for the ColorPicker pop-up.
+ *
+ * As a DialogFragment, it appears above the underlying HomeFragment.
+ */
 class ColorPickerDialogFragment : DialogFragment() {
 
-
+    /**
+     * This inflates the view, and sets the onClickListener for each button within the DialogFragment.
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.color_picker, container, false)
 
@@ -23,6 +30,11 @@ class ColorPickerDialogFragment : DialogFragment() {
         return view
     }
 
+    /**
+     * Send the chosen colour to the assigned listener.
+     *
+     * The listener is that which implements this class's interface, and is set to be the DialogFragment's target Fragment.
+     */
     private fun setColor(button: View?) {
         val chosenColorID : Int = when (button!!.id) {
             R.id.blue_button -> R.color.blue
@@ -37,14 +49,17 @@ class ColorPickerDialogFragment : DialogFragment() {
         val listener = targetFragment!! as DialogListener
         listener.onColorSelected(chosenColorID)
 
-        dismiss()
+        dismiss()//Stop showing the DialogFragment. Return user to underlying HomeFragment
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        dismiss()
+        dismiss()//Stop showing the DialogFragment. Return user to underlying HomeFragment
     }
 
+    /**
+     * Implementing this allows for communication between the DialogFragment and the HomeFragment.
+     */
     interface DialogListener {
         fun onColorSelected(colorID: Int)
     }

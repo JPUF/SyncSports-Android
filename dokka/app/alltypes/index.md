@@ -43,6 +43,8 @@
 
 ##### [com.jlbennett.syncsports.home.ColorPickerDialogFragment](../com.jlbennett.syncsports.home/-color-picker-dialog-fragment/index.md)
 
+The logic for the ColorPicker pop-up.
+
 
 |
 
@@ -88,6 +90,8 @@ The underlying Activity class.
 |
 
 ##### [com.jlbennett.syncsports.home.RoomAdapter](../com.jlbennett.syncsports.home/-room-adapter/index.md)
+
+The adapter class for the RecyclerView displaying all rooms.
 
 
 |

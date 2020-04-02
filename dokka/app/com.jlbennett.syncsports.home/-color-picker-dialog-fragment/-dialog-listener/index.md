@@ -4,6 +4,8 @@
 
 `interface DialogListener`
 
+Implementing this allows for communication between the DialogFragment and the HomeFragment.
+
 ### Functions
 
 | Name | Summary |

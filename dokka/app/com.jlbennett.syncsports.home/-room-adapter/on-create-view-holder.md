@@ -3,3 +3,6 @@
 # onCreateViewHolder
 
 `fun onCreateViewHolder(parent: `[`ViewGroup`](https://developer.android.com/reference/android/view/ViewGroup.html)`, viewType: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`RoomViewHolder`](../-room-view-holder/index.md)
+
+The ViewHolder is a wrapper around each room_item view. This facilitates the 'recycling'.
+
