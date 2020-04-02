@@ -10,6 +10,14 @@
 |---|---|
 | [&lt;init&gt;](-init-.md) | `ChatViewModelFactory(matchTime: `[`MatchTime`](../../com.jlbennett.syncsports.util/-match-time/index.md)`, roomName: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, user: `[`User`](../../com.jlbennett.syncsports.util/-user/index.md)`)` |
 
+### Properties
+
+| Name | Summary |
+|---|---|
+| [matchTime](match-time.md) | `val matchTime: `[`MatchTime`](../../com.jlbennett.syncsports.util/-match-time/index.md) |
+| [roomName](room-name.md) | `val roomName: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [user](user.md) | `val user: `[`User`](../../com.jlbennett.syncsports.util/-user/index.md) |
+
 ### Functions
 
 | Name | Summary |

@@ -15,3 +15,9 @@
 | Name | Summary |
 |---|---|
 | [SECONDS](-s-e-c-o-n-d-s.md) | `static val SECONDS: `[`Array`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`!>!` |
+
+### Functions
+
+| Name | Summary |
+|---|---|
+| [init](init.md) | `open fun init(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |

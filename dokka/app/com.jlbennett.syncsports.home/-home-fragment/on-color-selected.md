@@ -4,7 +4,7 @@
 
 `fun onColorSelected(colorID: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
-The callback function for the colour selection `dialog'.
+The callback function for the colour selection dialog.
 
 This function is called when the user selects a colour.
 

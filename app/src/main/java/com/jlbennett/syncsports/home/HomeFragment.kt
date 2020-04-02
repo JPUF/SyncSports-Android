@@ -114,7 +114,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     }
 
     /**
-     * The callback function for the colour selection `dialog'.
+     * The callback function for the colour selection dialog.
      *
      * This function is called when the user selects a colour.
      * @param colorID The Android colour ID of the chosen colour.

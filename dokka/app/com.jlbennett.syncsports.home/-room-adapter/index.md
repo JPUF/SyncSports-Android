@@ -10,6 +10,12 @@
 |---|---|
 | [&lt;init&gt;](-init-.md) | `RoomAdapter(rooms: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Chatroom`](../../com.jlbennett.syncsports.util/-chatroom/index.md)`>)` |
 
+### Properties
+
+| Name | Summary |
+|---|---|
+| [roomList](room-list.md) | `val roomList: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Chatroom`](../../com.jlbennett.syncsports.util/-chatroom/index.md)`>` |
+
 ### Functions
 
 | Name | Summary |

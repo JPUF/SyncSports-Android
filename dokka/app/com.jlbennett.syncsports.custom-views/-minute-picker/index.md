@@ -16,3 +16,9 @@
 |---|---|
 | [FIRST_HALF_MINUTES](-f-i-r-s-t_-h-a-l-f_-m-i-n-u-t-e-s.md) | `static val FIRST_HALF_MINUTES: `[`Array`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`!>!` |
 | [SECOND_HALF_MINUTES](-s-e-c-o-n-d_-h-a-l-f_-m-i-n-u-t-e-s.md) | `static val SECOND_HALF_MINUTES: `[`Array`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`!>!` |
+
+### Functions
+
+| Name | Summary |
+|---|---|
+| [init](init.md) | `open fun init(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |

@@ -34,6 +34,10 @@ android {
     dokka {
         outputFormat = "gfm"
         outputDirectory = "$rootDir/dokka"
+
+        configuration {
+            includeNonPublic = true
+        }
     }
 }
 
