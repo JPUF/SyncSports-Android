@@ -13,7 +13,6 @@ import org.json.JSONObject
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val roomSocket = IO.socket("http://syncsport.herokuapp.com/rooms")
-    private val context = getApplication<Application>().applicationContext
 
     init {
         Log.d("HomeView", "HomeViewModel Created")

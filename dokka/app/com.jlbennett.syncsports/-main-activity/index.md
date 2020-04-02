@@ -4,11 +4,15 @@
 
 `class MainActivity : AppCompatActivity`
 
+The underlying Activity class.
+
+This activity hosts all other fragments, which are responsible for displaying each individual screen. As can be seen in activity_main.xml, this MainActivity simply has a singular 'NavHostFragment' which controls the currently visible Fragment, via the Navigation component.
+
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `MainActivity()` |
+| [&lt;init&gt;](-init-.md) | The underlying Activity class.`MainActivity()` |
 
 ### Functions
 

@@ -70,6 +70,8 @@ The View class for the Home screen.
 
 ##### [com.jlbennett.syncsports.MainActivity](../com.jlbennett.syncsports/-main-activity/index.md)
 
+The underlying Activity class.
+
 
 |
 
