@@ -3,3 +3,6 @@
 # chatSocket
 
 `private val chatSocket: Socket!`
+
+Reference to the chat namespace on the server.
+

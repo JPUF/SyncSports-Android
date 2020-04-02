@@ -3,3 +3,6 @@
 # _receivedMessage
 
 `private val _receivedMessage: MutableLiveData<`[`ChatMessage`](../-chat-message/index.md)`>`
+
+Private and mutable field that stores the most recently received message.
+

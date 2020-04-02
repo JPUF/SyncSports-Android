@@ -3,3 +3,6 @@
 # connectToChatAPI
 
 `private fun connectToChatAPI(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Connects to the chat socket namespace. Registers callback functions.
+

@@ -3,3 +3,6 @@
 # messages
 
 `val messages: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatMessage`](../-chat-message/index.md)`>`
+
+The current messages.
+

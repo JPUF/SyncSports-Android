@@ -3,3 +3,6 @@
 # receivedMessage
 
 `val receivedMessage: LiveData<`[`ChatMessage`](../-chat-message/index.md)`>`
+
+Exposes the most recently received message in an immutable fashion.
+

@@ -3,3 +3,6 @@
 # sharedPref
 
 `private lateinit var sharedPref: `[`SharedPreferences`](https://developer.android.com/reference/android/content/SharedPreferences.html)
+
+Used for reading from local storage.
+

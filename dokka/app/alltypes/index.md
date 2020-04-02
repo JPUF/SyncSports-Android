@@ -8,6 +8,8 @@
 
 ##### [com.jlbennett.syncsports.chat.ChatFragment](../com.jlbennett.syncsports.chat/-chat-fragment/index.md)
 
+The View logic for the Chat screen. Handles UI logic.
+
 
 |
 
@@ -18,10 +20,14 @@
 
 ##### [com.jlbennett.syncsports.chat.ChatMessage](../com.jlbennett.syncsports.chat/-chat-message/index.md)
 
+A Plain-Old-Data class to represent a single message.
+
 
 |
 
 ##### [com.jlbennett.syncsports.chat.ChatMessageAdapter](../com.jlbennett.syncsports.chat/-chat-message-adapter/index.md)
+
+The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.
 
 
 |
@@ -33,10 +39,14 @@
 
 ##### [com.jlbennett.syncsports.chat.ChatViewModel](../com.jlbennett.syncsports.chat/-chat-view-model/index.md)
 
+The ViewModel for the ChatFragment. This handles all the dynamic data shown in the ChatFragment.
+
 
 |
 
 ##### [com.jlbennett.syncsports.chat.ChatViewModelFactory](../com.jlbennett.syncsports.chat/-chat-view-model-factory/index.md)
+
+A class to create a ChatViewModel with the given parameters.
 
 
 |
@@ -117,6 +127,8 @@ The adapter class for the RecyclerView displaying all rooms.
 |
 
 ##### [com.jlbennett.syncsports.chat.TimeAdjustDialogFragment](../com.jlbennett.syncsports.chat/-time-adjust-dialog-fragment/index.md)
+
+The logic to allow the user to adjust their current [MatchTime](../com.jlbennett.syncsports.util/-match-time/index.md) without having to exit the chatroom.
 
 
 |

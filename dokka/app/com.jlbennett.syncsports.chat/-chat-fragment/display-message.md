@@ -3,3 +3,6 @@
 # displayMessage
 
 `private fun displayMessage(chatMessage: `[`ChatMessage`](../-chat-message/index.md)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Adds a message to the adapter.
+

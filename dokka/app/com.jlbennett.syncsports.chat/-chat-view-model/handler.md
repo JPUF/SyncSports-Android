@@ -3,3 +3,6 @@
 # handler
 
 `private val handler: `[`Handler`](https://developer.android.com/reference/android/os/Handler.html)
+
+The Android Handler that coordinates execution of the timer updating.
+

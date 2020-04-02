@@ -4,11 +4,13 @@
 
 `data class ChatMessage`
 
+A Plain-Old-Data class to represent a single message.
+
 ### Constructors
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | `ChatMessage(user: `[`User`](../../com.jlbennett.syncsports.util/-user/index.md)`, message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, matchTime: `[`MatchTime`](../../com.jlbennett.syncsports.util/-match-time/index.md)`)` |
+| [&lt;init&gt;](-init-.md) | A Plain-Old-Data class to represent a single message.`ChatMessage(user: `[`User`](../../com.jlbennett.syncsports.util/-user/index.md)`, message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, matchTime: `[`MatchTime`](../../com.jlbennett.syncsports.util/-match-time/index.md)`)` |
 
 ### Properties
 

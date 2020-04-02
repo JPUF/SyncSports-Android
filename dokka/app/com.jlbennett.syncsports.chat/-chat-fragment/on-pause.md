@@ -3,3 +3,6 @@
 # onPause
 
 `fun onPause(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Handle the user navigating away from the chat screen.
+

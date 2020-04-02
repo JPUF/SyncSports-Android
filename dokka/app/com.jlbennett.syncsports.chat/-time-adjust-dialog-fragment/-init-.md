@@ -3,3 +3,6 @@
 # &lt;init&gt;
 
 `TimeAdjustDialogFragment()`
+
+The logic to allow the user to adjust their current [MatchTime](../../com.jlbennett.syncsports.util/-match-time/index.md) without having to exit the chatroom.
+

@@ -12,24 +12,36 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jlbennett.syncsports.R
 
+/**
+ * The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.
+ * @param messages All the received messages.
+ */
 class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<ChatItemViewHolder>() {
-    //"MSG1","MSG2","MSG3","MSG4","MSG5","MSG6","MSG7","MSG8"
     var data = messages
     set(value) {
         field = value
         notifyDataSetChanged()
     }
 
+    /**
+     * Append a new message to the list of messages.
+     */
     fun addMessage(message: ChatMessage) {
         data = data + message
     }
 
     override fun getItemCount() = data.size
 
+    /**
+     * Populate each view with the appropriate information.
+     *
+     * Sets the correct text colour for the user, and populates the TextView with the message text.
+     */
     override fun onBindViewHolder(holder: ChatItemViewHolder, position: Int) {
         val item = data[position]
         val messageText = holder.messageTextView
 
+        //Convert Android colour ID to RGB hex values. So it can be used with the generic Java Color class.
         val colorString = when (item.user.color) {
             R.color.blue -> "#0B4AB0"
             R.color.red -> "#910606"
@@ -40,6 +52,8 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
             else -> "#0B4AB0"
         }
 
+        //A SpannableString allows for different subsections of the string to have different formatting.
+        //This is desired to have the username bold and colourful, and the body of the message looking normal.
         val messageSpannableString = SpannableString("${item.user.name}: ${item.message}")
         messageSpannableString.setSpan(
             ForegroundColorSpan(Color.parseColor(colorString)),

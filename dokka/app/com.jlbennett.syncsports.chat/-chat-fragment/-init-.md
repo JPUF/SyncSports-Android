@@ -3,3 +3,6 @@
 # &lt;init&gt;
 
 `ChatFragment()`
+
+The View logic for the Chat screen. Handles UI logic.
+

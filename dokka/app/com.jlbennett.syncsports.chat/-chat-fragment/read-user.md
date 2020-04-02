@@ -3,3 +3,6 @@
 # readUser
 
 `private fun readUser(): `[`User`](../../com.jlbennett.syncsports.util/-user/index.md)
+
+Reads the locally stored user object
+

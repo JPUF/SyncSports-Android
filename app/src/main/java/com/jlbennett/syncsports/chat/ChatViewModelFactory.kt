@@ -5,6 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.User
 
+/**
+ * A class to create a ChatViewModel with the given parameters.
+ *
+ * This is used to return the singleton ViewModel class from within the ChatFragment class.
+ */
 class ChatViewModelFactory(
     private val matchTime: MatchTime,
     private val roomName: String,

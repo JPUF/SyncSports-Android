@@ -3,3 +3,6 @@
 # timeIsUpdated
 
 `var timeIsUpdated: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
+
+Reflects whether or not the user has updated their time.
+

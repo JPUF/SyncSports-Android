@@ -3,3 +3,6 @@
 # onResume
 
 `fun onResume(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Handle user returning to the chat screen after having navigated away.
+
