@@ -3,3 +3,6 @@
 # connectToRoomAPI
 
 `private fun connectToRoomAPI(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Assigns callback functions to be executed on socket events.
+

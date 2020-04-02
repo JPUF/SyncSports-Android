@@ -3,3 +3,6 @@
 # disconnectFromRooms
 
 `fun disconnectFromRooms(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Disconnect from the room namespace.
+

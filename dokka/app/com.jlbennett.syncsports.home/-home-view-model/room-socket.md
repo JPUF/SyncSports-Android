@@ -3,3 +3,6 @@
 # roomSocket
 
 `private val roomSocket: Socket!`
+
+Reference to the socket server 'rooms' namespace. Note: http not https.
+

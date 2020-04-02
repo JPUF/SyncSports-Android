@@ -3,3 +3,11 @@
 # &lt;init&gt;
 
 `HomeViewModel(application: `[`Application`](https://developer.android.com/reference/android/app/Application.html)`)`
+
+ViewModel for the HomeFragment.
+
+This fragment is exposed via the ViewModelProvider class. It's a singleton, and survives Android configuration changes.
+
+### Parameters
+
+`application` - The android application context.

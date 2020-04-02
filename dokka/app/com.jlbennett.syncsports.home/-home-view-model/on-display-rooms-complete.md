@@ -3,3 +3,6 @@
 # onDisplayRoomsComplete
 
 `fun onDisplayRoomsComplete(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Reset the boolean, so future changes can be observed.
+

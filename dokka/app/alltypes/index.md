@@ -65,6 +65,8 @@ The View class for the Home screen.
 
 ##### [com.jlbennett.syncsports.home.HomeViewModel](../com.jlbennett.syncsports.home/-home-view-model/index.md)
 
+ViewModel for the HomeFragment.
+
 
 |
 
