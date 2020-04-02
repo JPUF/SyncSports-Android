@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: "androidx.navigation.safeargs"
 
+apply plugin: "org.jetbrains.dokka"
+
 android {
     compileSdkVersion 29
     defaultConfig {
@@ -27,6 +29,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    dokka {
+        outputFormat = "gfm"
+        outputDirectory = "$rootDir/dokka"
     }
 }
 

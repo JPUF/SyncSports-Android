@@ -1,0 +1,10 @@
+$dokka.format:gfm
+$dokka.linkExtension:md
+
+com.jlbennett.syncsports
+com.jlbennett.syncsports.chat
+com.jlbennett.syncsports.createRoom
+com.jlbennett.syncsports.customViews
+com.jlbennett.syncsports.home
+com.jlbennett.syncsports.sync
+com.jlbennett.syncsports.util

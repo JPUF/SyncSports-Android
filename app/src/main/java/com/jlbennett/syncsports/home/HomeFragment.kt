@@ -23,7 +23,11 @@ import com.jlbennett.syncsports.databinding.FragmentHomeBinding
 import com.jlbennett.syncsports.util.User
 import java.util.regex.Pattern
 
-
+/**
+ * The View class for the Home screen.
+ *
+ * This screen is responsible for username entry, colour selection, and displaying the active set of chatrooms.
+ */
 class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
 
     private lateinit var binding: FragmentHomeBinding
@@ -33,10 +37,7 @@ class HomeFragment : Fragment(), ColorPickerDialogFragment.DialogListener {
     private lateinit var username: String
     private var color: Int = R.color.blue
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
