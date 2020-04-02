@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -90,6 +92,31 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
             binding.inputText.setText(R.string.empty)
             viewModel.sendMessage(chatMessage.toString())
+
+            binding.inputText.let { v ->
+                val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+
+        }
+
+        binding.inputText.setOnEditorActionListener { view, actionID, _ ->
+            return@setOnEditorActionListener when (actionID){
+                EditorInfo.IME_ACTION_SEND -> {
+                    val chatMessage = view.text
+                    binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
+                    binding.inputText.setText(R.string.empty)
+                    viewModel.sendMessage(chatMessage.toString())
+
+                    view?.let { v ->
+                        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                        imm?.hideSoftInputFromWindow(v.windowToken, 0)
+                    }
+
+                    true
+                }
+                else -> false
+            }
         }
 
         return binding.root
