@@ -2,4 +2,7 @@
 
 # &lt;init&gt;
 
-`ChatItemViewHolder(messageTextView: `[`TextView`](https://developer.android.com/reference/android/widget/TextView.html)`)`
+`ChatItemViewHolder(chatItemLayout: `[`LinearLayout`](https://developer.android.com/reference/android/widget/LinearLayout.html)`)`
+
+This class acts as a wrapper around each individual View within the RecyclerView.
+

@@ -15,6 +15,8 @@ The View logic for the Chat screen. Handles UI logic.
 
 ##### [com.jlbennett.syncsports.chat.ChatItemViewHolder](../com.jlbennett.syncsports.chat/-chat-item-view-holder/index.md)
 
+This class acts as a wrapper around each individual View within the RecyclerView.
+
 
 |
 

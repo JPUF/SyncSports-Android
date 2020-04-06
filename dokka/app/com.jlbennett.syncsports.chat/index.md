@@ -7,7 +7,7 @@
 | Name | Summary |
 |---|---|
 | [ChatFragment](-chat-fragment/index.md) | The View logic for the Chat screen. Handles UI logic.`class ChatFragment : Fragment, DialogListener` |
-| [ChatItemViewHolder](-chat-item-view-holder/index.md) | `class ChatItemViewHolder : ViewHolder` |
+| [ChatItemViewHolder](-chat-item-view-holder/index.md) | This class acts as a wrapper around each individual View within the RecyclerView.`class ChatItemViewHolder : ViewHolder` |
 | [ChatMessage](-chat-message/index.md) | A Plain-Old-Data class to represent a single message.`data class ChatMessage` |
 | [ChatMessageAdapter](-chat-message-adapter/index.md) | The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.`class ChatMessageAdapter : Adapter<`[`ChatItemViewHolder`](-chat-item-view-holder/index.md)`>` |
 | [ChatViewModel](-chat-view-model/index.md) | The ViewModel for the ChatFragment. This handles all the dynamic data shown in the ChatFragment.`class ChatViewModel : ViewModel` |

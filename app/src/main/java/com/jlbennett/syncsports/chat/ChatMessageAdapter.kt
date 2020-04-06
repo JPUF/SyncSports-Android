@@ -27,7 +27,9 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
         }
 
     /**
-     * Append a new message to the list of messages.
+     * Inserts the given [ChatMessage] into the correct position in the list of messages.
+     *
+     * This position would typically be at the bottom of the list. However, because of asynchronous communication, the message may need to be inserted before more recent messages.
      */
     fun insertMessage(message: ChatMessage) {
         //data = data + message
@@ -43,6 +45,11 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
         notifyDataSetChanged()
     }
 
+    /**
+     * Calculates the index within the message list that the incoming message should be inserted to.
+     *
+     * @return Either the calculated index, or -1 if the message should instead simply be appended to the end of the existing list.
+     */
     private fun indexToInsertMessage(message: ChatMessage): Int {
         val messageListIterator = data.listIterator(data.size)
         while (messageListIterator.hasPrevious()) {
@@ -131,6 +138,9 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
         messageText.text = messageSpannableString
     }
 
+    /**
+     * Inflates view for each item in the list.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.chat_item_view, parent, false) as LinearLayout
@@ -138,4 +148,7 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
     }
 }
 
+/**
+ * This class acts as a wrapper around each individual View within the RecyclerView.
+ */
 class ChatItemViewHolder(chatItemLayout: LinearLayout) : RecyclerView.ViewHolder(chatItemLayout)
