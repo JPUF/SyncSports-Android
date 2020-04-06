@@ -36,4 +36,10 @@ data class MatchTime(var state: State, var minutes: Int, var seconds: Int, var q
             return arrayOfNulls(size)
         }
     }
+
+    fun readableString(): String {
+        val minString = String.format("%02d", minutes)
+        val secString = String.format("%02d", seconds)
+        return "$minString:$secString"
+    }
 }

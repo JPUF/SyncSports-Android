@@ -86,8 +86,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
 
         //Listen for changes in the Match Time. This changes with every passing second.
         viewModel.matchTime.observe(viewLifecycleOwner, Observer { updatingMatchTime ->
-            val minString = String.format("%02d", updatingMatchTime.minutes)
-            val secString = String.format("%02d", updatingMatchTime.seconds)
+            val timeString = updatingMatchTime.readableString()
             val stateString = when (updatingMatchTime.state) {
                 State.PRE_MATCH -> "Pre-Match"
                 State.FIRST_HALF -> "1st Half"
@@ -95,7 +94,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
                 State.SECOND_HALF -> "2nd Half"
                 State.FULL_TIME -> "Full Time"
             }
-            val matchTimeString = "$stateString\n$minString:$secString"
+            val matchTimeString = "$stateString\n$timeString"
             //Display the updated match time.
             binding.timeButton.text = matchTimeString
 
@@ -113,15 +112,15 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
 
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 
-        //Populate adapter with current list of messages.
-        recyclerViewAdapter = ChatMessageAdapter(viewModel.messages)
+        //Populate adapter with current list of messages. Mutable so new messages can be inserted.
+        recyclerViewAdapter = ChatMessageAdapter(viewModel.messages.toMutableList())
         binding.chatMessageList.adapter = recyclerViewAdapter
 
         //Handle the event of the user pressing the send button.
         binding.sendButton.setOnClickListener {
             val chatMessage = binding.inputText.text
 
-            if(!chatMessage.isBlank()) //Only process non blank messages (can't send just whitespace).
+            if(chatMessage.isNotBlank()) //Only process non blank messages (can't send just whitespace).
             {
                 //Scroll the recycler view to the bottom.
                 binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
@@ -145,9 +144,12 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             return@setOnEditorActionListener when (actionID) {
                 EditorInfo.IME_ACTION_SEND -> {
                     val chatMessage = view.text
-                    binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
-                    binding.inputText.setText(R.string.empty)
-                    viewModel.sendMessage(chatMessage.toString())
+                    if(chatMessage.isNotBlank())
+                    {
+                        binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
+                        binding.inputText.setText(R.string.empty)
+                        viewModel.sendMessage(chatMessage.toString())
+                    }
                     view?.let { v ->
                         val manager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                         manager?.hideSoftInputFromWindow(v.windowToken, 0)
@@ -166,7 +168,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
      */
     private fun displayMessage(chatMessage: ChatMessage) {
         activity!!.runOnUiThread {
-            recyclerViewAdapter.addMessage(chatMessage)
+            recyclerViewAdapter.insertMessage(chatMessage)
         }
     }
 

@@ -76,9 +76,7 @@ class TimeAdjustDialogFragment : DialogFragment() {
         )
         //TODO needs to wrap going backwards over the minute mark.. (no minus seconds)
         Log.d("timeAdjust", "seconds: $adjustmentSeconds")
-        val minString = String.format("%02d", adjustedTime.minutes)
-        val secString = String.format("%02d", adjustedTime.seconds)
-        val matchTimeString = "New time — $minString:$secString"
+        val matchTimeString = "New time — ${adjustedTime.readableString()}"
         newTimeText.text = matchTimeString
         timeIsUpdated = true
     }

@@ -6,9 +6,12 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.jlbennett.syncsports.R
 
@@ -18,16 +21,68 @@ import com.jlbennett.syncsports.R
  */
 class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<ChatItemViewHolder>() {
     var data = messages
-    set(value) {
-        field = value
-        notifyDataSetChanged()
-    }
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     /**
      * Append a new message to the list of messages.
      */
-    fun addMessage(message: ChatMessage) {
-        data = data + message
+    fun insertMessage(message: ChatMessage) {
+        //data = data + message
+
+        val indexToInsert = indexToInsertMessage(message)
+        if (indexToInsert == -1) {
+            data = data + message
+        } else {
+            val newList = data.toMutableList()
+            newList.add(indexToInsert, message)
+            data = newList
+        }
+        notifyDataSetChanged()
+    }
+
+    private fun indexToInsertMessage(message: ChatMessage): Int {
+        val messageListIterator = data.listIterator(data.size)
+        while (messageListIterator.hasPrevious()) {
+            val existingMessage = messageListIterator.previous()
+            if (isBeforeExistingMessage(message, existingMessage)) {
+                Log.d(
+                    "ChatAdapter",
+                    "${message.matchTime.readableString()} compared to ${existingMessage.matchTime.readableString()} : ${isBeforeExistingMessage(
+                        message,
+                        existingMessage
+                    )}"
+                )
+                val indexToInsert = data.lastIndexOf(existingMessage)
+                Log.d("ChatAdapter", "Insert at: $indexToInsert, is last? ${indexToInsert == data.lastIndex}")
+                return indexToInsert
+            }
+        }
+        return -1
+    }
+
+    /**
+     * Compare two MatchTime objects.
+     * @return True if the new message was sent before the existing message (in MatchTime).
+     */
+    private fun isBeforeExistingMessage(newMessage: ChatMessage, existingMessage: ChatMessage): Boolean {
+        val newTime = newMessage.matchTime
+        val existingTime = existingMessage.matchTime
+
+        Log.d("ChatAdapter", "${newTime.readableString()} compared to ${existingTime.readableString()}}")
+
+        if (newTime.minutes > existingTime.minutes) return false
+
+        if (newTime.minutes == existingTime.minutes) {
+            if (newTime.seconds > existingTime.seconds) return false
+
+            return if (newTime.seconds == existingTime.seconds) {
+                newTime.quarterSeconds > existingTime.quarterSeconds
+            } else true
+        }
+        return true
     }
 
     override fun getItemCount() = data.size
@@ -39,7 +94,12 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
      */
     override fun onBindViewHolder(holder: ChatItemViewHolder, position: Int) {
         val item = data[position]
-        val messageText = holder.messageTextView
+        val parentConstraintLayout = holder.itemView as LinearLayout
+        val timeText = parentConstraintLayout[0] as TextView
+        val messageText = parentConstraintLayout[1] as TextView
+
+        val matchTimeString = item.matchTime.readableString()
+        timeText.text = matchTimeString
 
         //Convert Android colour ID to RGB hex values. So it can be used with the generic Java Color class.
         val colorString = when (item.user.color) {
@@ -52,24 +112,30 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
             else -> "#0B4AB0"
         }
 
+
         //A SpannableString allows for different subsections of the string to have different formatting.
         //This is desired to have the username bold and colourful, and the body of the message looking normal.
         val messageSpannableString = SpannableString("${item.user.name}: ${item.message}")
         messageSpannableString.setSpan(
             ForegroundColorSpan(Color.parseColor(colorString)),
             0,
-            item.user.name.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            item.user.name.length + 1,
+            Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
-        messageSpannableString.setSpan(StyleSpan(BOLD),0, item.user.name.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        messageSpannableString.setSpan(
+            StyleSpan(BOLD),
+            0,
+            item.user.name.length + 1,
+            Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+        )
         messageText.text = messageSpannableString
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.chat_item_view, parent, false) as TextView
+        val view = layoutInflater.inflate(R.layout.chat_item_view, parent, false) as LinearLayout
         return ChatItemViewHolder(view)
     }
 }
 
-class ChatItemViewHolder(val messageTextView: TextView): RecyclerView.ViewHolder(messageTextView)
+class ChatItemViewHolder(chatItemLayout: LinearLayout) : RecyclerView.ViewHolder(chatItemLayout)
