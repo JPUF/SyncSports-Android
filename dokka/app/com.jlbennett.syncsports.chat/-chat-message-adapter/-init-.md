@@ -2,7 +2,7 @@
 
 # &lt;init&gt;
 
-`ChatMessageAdapter(messages: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatMessage`](../-chat-message/index.md)`>)`
+`ChatMessageAdapter(messages: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatMessage`](../-chat-message/index.md)`>, listener: `[`ReplyCallback`](../-reply-callback/index.md)`)`
 
 The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.
 

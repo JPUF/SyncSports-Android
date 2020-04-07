@@ -4,6 +4,7 @@ package com.jlbennett.syncsports.chat
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,10 +24,16 @@ import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
 import java.util.*
 
+
 /**
  * The View logic for the Chat screen. Handles UI logic.
  */
-class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
+class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyCallback {
+
+    /**
+     * Will be populated (at compile-time) with references to the fragment's View objects.
+     */
+    private lateinit var binding: FragmentChatBinding
 
     /**
      * Reference to the ViewModel singleton. This handles the fragment's dynamic data, including message i/o.
@@ -51,7 +58,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val binding: FragmentChatBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_chat, container, false
         )
 
@@ -74,6 +81,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
                 val chatMessage: ChatMessage =
                     viewModel.receivedMessage.value ?: ChatMessage(
                         null,
+                        -1,
                         User("X", R.color.blue),
                         "Error receiving message",
                         MatchTime(State.PRE_MATCH, 0, 0, 0)
@@ -114,7 +122,8 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
         binding.chatMessageList.layoutManager = LinearLayoutManager(this.context)//Set RecyclerView LayoutManager
 
         //Populate adapter with current list of messages. Mutable so new messages can be inserted.
-        recyclerViewAdapter = ChatMessageAdapter(viewModel.messages.toMutableList())
+        recyclerViewAdapter = ChatMessageAdapter(viewModel.messages.toMutableList(), this)
+
         binding.chatMessageList.adapter = recyclerViewAdapter
 
         //Handle the event of the user pressing the send button.
@@ -187,6 +196,25 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
      */
     override fun onTimeSet(matchTime: MatchTime) {
         viewModel.updateMatchTime(matchTime)
+    }
+
+    /**
+     * Called when a user clicks on a message (to reply).
+     */
+    override fun setupEntryForReply(parentMessage: ChatMessage) {
+        Log.d("ChatAdapter", "Setup reply for: ${parentMessage.id}. Reply to ${parentMessage.user.name}")
+        val replyAt = "@${parentMessage.user.name} "
+        binding.inputText.setText(replyAt)
+
+        binding.inputText.post {
+            binding.inputText.requestFocusFromTouch()
+            val inputManager = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.showSoftInput(binding.inputText, 0)
+            binding.inputText.setSelection(binding.inputText.text.length)
+        }
+
+        //TODO needs to send this message with the parent ID.
+        //TODO then that message needs to be inserted beneath its parent.
     }
 
     /**

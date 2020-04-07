@@ -19,12 +19,15 @@ import com.jlbennett.syncsports.R
  * The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.
  * @param messages All the received messages.
  */
-class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<ChatItemViewHolder>() {
-    var data = messages
+class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
+    RecyclerView.Adapter<ChatItemViewHolder>() {
+    private var data = messages
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    private var clickListener: ReplyCallback = listener
 
     /**
      * Inserts the given [ChatMessage] into the correct position in the list of messages.
@@ -32,7 +35,6 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
      * This position would typically be at the bottom of the list. However, because of asynchronous communication, the message may need to be inserted before more recent messages.
      */
     fun insertMessage(message: ChatMessage) {
-        //data = data + message
 
         val indexToInsert = indexToInsertMessage(message)
         if (indexToInsert == -1) {
@@ -79,6 +81,10 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
         val existingTime = existingMessage.matchTime
 
         Log.d("ChatAdapter", "${newTime.readableString()} compared to ${existingTime.readableString()}}")
+        Log.d(
+            "ChatAdapter",
+            "new: ${newMessage.message} id = ${newMessage.id}.    old: ${existingMessage.message} id = ${existingMessage.id}"
+        )
 
         if (newTime.minutes > existingTime.minutes) return false
 
@@ -136,6 +142,10 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
             Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
         messageText.text = messageSpannableString
+
+        holder.itemView.setOnClickListener {
+            clickListener.setupEntryForReply(item)
+        }
     }
 
     /**
@@ -152,3 +162,7 @@ class ChatMessageAdapter(messages: List<ChatMessage>) : RecyclerView.Adapter<Cha
  * This class acts as a wrapper around each individual View within the RecyclerView.
  */
 class ChatItemViewHolder(chatItemLayout: LinearLayout) : RecyclerView.ViewHolder(chatItemLayout)
+
+interface ReplyCallback {
+    fun setupEntryForReply(parentMessage: ChatMessage)
+}

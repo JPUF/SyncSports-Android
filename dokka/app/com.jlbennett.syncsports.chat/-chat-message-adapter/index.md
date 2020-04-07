@@ -14,12 +14,13 @@ The adapter class to convert the raw ChatMessages into Views to be displayed in 
 
 | Name | Summary |
 |---|---|
-| [&lt;init&gt;](-init-.md) | The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.`ChatMessageAdapter(messages: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatMessage`](../-chat-message/index.md)`>)` |
+| [&lt;init&gt;](-init-.md) | The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.`ChatMessageAdapter(messages: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatMessage`](../-chat-message/index.md)`>, listener: `[`ReplyCallback`](../-reply-callback/index.md)`)` |
 
 ### Properties
 
 | Name | Summary |
 |---|---|
+| [clickListener](click-listener.md) | `var clickListener: `[`ReplyCallback`](../-reply-callback/index.md) |
 | [data](data.md) | `var data: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`ChatMessage`](../-chat-message/index.md)`>` |
 
 ### Functions
