@@ -6,4 +6,4 @@ import com.jlbennett.syncsports.util.User
 /**
  * A Plain-Old-Data class to represent a single message.
  */
-data class ChatMessage (val user: User, val message: String, val matchTime: MatchTime)
+data class ChatMessage (val id: Int?, val user: User, val message: String, val matchTime: MatchTime)

@@ -128,6 +128,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             //Interpret data into Kotlin Native code.
 
             val msgObject = args[0] as JSONObject
+            val id = msgObject.get("id") as Int
             val username = msgObject.get("username") as String
             val userColor = msgObject.get("color") as Int
             val message = msgObject.get("message") as String
@@ -147,7 +148,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
 
             //Translate into the appropriate Data objects.
             val incomingMatchTime = MatchTime(state, minutes, seconds, quarterSeconds)
-            val chatMessage = ChatMessage((User(username, userColor)), message, incomingMatchTime)
+            val chatMessage = ChatMessage(id, (User(username, userColor)), message, incomingMatchTime)
 
             val timeDifference: Long = calculateDifferenceInMillis(incomingMatchTime)
             updateMessage(chatMessage, timeDifference)
@@ -195,6 +196,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
     fun sendMessage(message: String) {
         //Package the message in a JSON object, so it can emit through the socket API.
         val msgObject = JSONObject()
+        msgObject.put("id", null)
         msgObject.put("username", _user.name)
         msgObject.put("color", _user.color)
         msgObject.put("message", message)

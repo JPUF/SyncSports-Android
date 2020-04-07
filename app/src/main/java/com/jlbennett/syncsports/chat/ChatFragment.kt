@@ -73,6 +73,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener {
             if (hasMessageToShow) {
                 val chatMessage: ChatMessage =
                     viewModel.receivedMessage.value ?: ChatMessage(
+                        null,
                         User("X", R.color.blue),
                         "Error receiving message",
                         MatchTime(State.PRE_MATCH, 0, 0, 0)
