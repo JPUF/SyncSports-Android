@@ -1,6 +1,7 @@
 package com.jlbennett.syncsports.chat
 
 import android.os.Handler
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -103,6 +104,11 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
 
     private var _user = User("user", R.color.blue)
 
+    /**
+     * The message ID to reply to. -1 indicates that the message is not a reply.
+     */
+    private var _replyToID: Int = -1
+
     init {
         _matchTime.value = matchTime
         _user = user
@@ -150,7 +156,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             //Translate into the appropriate Data objects.
             val incomingMatchTime = MatchTime(state, minutes, seconds, quarterSeconds)
             val chatMessage = ChatMessage(id, parentID, (User(username, userColor)), message, incomingMatchTime)
-
+            Log.d("ChatViewModel", "Received. This is a reply to: $parentID")
             val timeDifference: Long = calculateDifferenceInMillis(incomingMatchTime)
             updateMessage(chatMessage, timeDifference)
         }
@@ -198,7 +204,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
         //Package the message in a JSON object, so it can emit through the socket API.
         val msgObject = JSONObject()
         msgObject.put("id", null)
-        msgObject.put("parent_id", -1)
+        msgObject.put("parent_id", _replyToID)
         msgObject.put("username", _user.name)
         msgObject.put("color", _user.color)
         msgObject.put("message", message)
@@ -213,6 +219,8 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
 
         //Emit a chat_message event with the object that includes the time, user, and text.
         chatSocket.emit("chat_message", msgObject)
+
+        _replyToID = -1 //Reset to the default of -1 (i.e. the message is not a reply).
     }
 
     fun disconnectFromChatroom() {
@@ -230,6 +238,10 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
      */
     fun onDisplayMessageComplete() {
         _eventMessageToShow.value = false
+    }
+
+    fun setReplyID(parentID: Int) {
+        _replyToID = parentID
     }
 
     fun resumeTimer(matchTime: MatchTime) {

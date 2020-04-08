@@ -213,8 +213,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
             binding.inputText.setSelection(binding.inputText.text.length)
         }
 
-        //TODO needs to send this message with the parent ID.
-        //TODO then that message needs to be inserted beneath its parent.
+        viewModel.setReplyID(parentMessage.id ?: -1)
     }
 
     /**

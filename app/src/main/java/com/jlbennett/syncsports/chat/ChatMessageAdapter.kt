@@ -8,12 +8,16 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.jlbennett.syncsports.R
+
+
+
 
 /**
  * The adapter class to convert the raw ChatMessages into Views to be displayed in the RecyclerView.
@@ -53,6 +57,11 @@ class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
      * @return Either the calculated index, or -1 if the message should instead simply be appended to the end of the existing list.
      */
     private fun indexToInsertMessage(message: ChatMessage): Int {
+        //True when message is a reply. In which case, it should be inserted at the position of the parent.
+        if(message.parentID != -1) {
+            return indexOfParent(message.parentID) + 1
+        }//TODO should do the same isBefore checks here. So it's inserted in the correct position within the replies.
+
         val messageListIterator = data.listIterator(data.size)
         while (messageListIterator.hasPrevious()) {
             val existingMessage = messageListIterator.previous()
@@ -70,6 +79,17 @@ class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
             }
         }
         return -1
+    }
+
+    private fun indexOfParent(parentID: Int): Int {
+        val messageListIterator = data.listIterator(data.size)
+        while (messageListIterator.hasPrevious()) {
+            val itIndex = messageListIterator.previousIndex()
+            val message = messageListIterator.previous()
+            Log.d("ChatAdapter","Doing iteration, itIndex = $itIndex")
+            if(message.id == parentID) return itIndex
+        }
+        return 0
     }
 
     /**
@@ -108,8 +128,8 @@ class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
     override fun onBindViewHolder(holder: ChatItemViewHolder, position: Int) {
         val item = data[position]
         val parentConstraintLayout = holder.itemView as LinearLayout
-        val timeText = parentConstraintLayout[0] as TextView
-        val messageText = parentConstraintLayout[1] as TextView
+        val timeText = parentConstraintLayout[1] as TextView
+        val messageText = parentConstraintLayout[2] as TextView
 
         val matchTimeString = item.matchTime.readableString()
         timeText.text = matchTimeString
@@ -142,6 +162,17 @@ class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
             Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
         messageText.text = messageSpannableString
+
+        if(item.parentID != -1) { //If the message is a reply.
+            //Indent message by setting line to be visible, this shows conversation threads.
+            val param = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1.25f
+            )
+            holder.itemView[1].layoutParams = param
+            holder.itemView[0].visibility = View.VISIBLE
+        }
 
         holder.itemView.setOnClickListener {
             clickListener.setupEntryForReply(item)
