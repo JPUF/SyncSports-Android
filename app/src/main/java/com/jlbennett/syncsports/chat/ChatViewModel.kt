@@ -50,7 +50,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
             if (quarterSeconds % 4 == 0) {
                 if (state == State.FIRST_HALF || state == State.SECOND_HALF) {
                     seconds = (seconds + 1) % 60
-                    if (seconds == 59) {
+                    if (seconds == 0) {
                         minutes = (minutes + 1) % 60
                     }
                 }//TODO handle state here

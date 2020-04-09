@@ -54,25 +54,32 @@ class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
     /**
      * Calculates the index within the message list that the incoming message should be inserted to.
      *
+     * This method considers replies as well. As replies should be inserted beneath their parent. Replies are also sorted by MatchTime within their own conversation thread.
+     *
      * @return Either the calculated index, or -1 if the message should instead simply be appended to the end of the existing list.
      */
     private fun indexToInsertMessage(message: ChatMessage): Int {
-        //True when message is a reply. In which case, it should be inserted at the position of the parent.
+        //True when message is a reply. In which case, it should be inserted at the correct position within the replies thread.
         if(message.parentID != -1) {
-            return indexOfParent(message.parentID) + 1
-        }//TODO should do the same isBefore checks here. So it's inserted in the correct position within the replies.
+            val parentIndex = indexOfParent(message.parentID)
+            var lastReplyIndex = parentIndex
+            val replyIterator = data.listIterator(parentIndex)
+            val baseID = replyIterator.next().id
+            while (replyIterator.hasNext()) {
+                val reply = replyIterator.next()
+                if(reply.parentID != baseID) break
+                if(isBeforeExistingMessage(message, reply)) {
+                    return data.lastIndexOf(reply)
+                }
+                lastReplyIndex++
+            }
+            return lastReplyIndex + 1
+        }
 
         val messageListIterator = data.listIterator(data.size)
         while (messageListIterator.hasPrevious()) {
             val existingMessage = messageListIterator.previous()
             if (isBeforeExistingMessage(message, existingMessage)) {
-                Log.d(
-                    "ChatAdapter",
-                    "${message.matchTime.readableString()} compared to ${existingMessage.matchTime.readableString()} : ${isBeforeExistingMessage(
-                        message,
-                        existingMessage
-                    )}"
-                )
                 val indexToInsert = data.lastIndexOf(existingMessage)
                 Log.d("ChatAdapter", "Insert at: $indexToInsert, is last? ${indexToInsert == data.lastIndex}")
                 return indexToInsert
@@ -165,13 +172,13 @@ class ChatMessageAdapter(messages: List<ChatMessage>, listener: ReplyCallback) :
 
         if(item.parentID != -1) { //If the message is a reply.
             //Indent message by setting line to be visible, this shows conversation threads.
-            val param = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.25f
-            )
+            val param = LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1.25f)
             holder.itemView[1].layoutParams = param
             holder.itemView[0].visibility = View.VISIBLE
+        } else {
+            val param = LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1f)
+            holder.itemView[1].layoutParams = param
+            holder.itemView[0].visibility = View.GONE
         }
 
         holder.itemView.setOnClickListener {
