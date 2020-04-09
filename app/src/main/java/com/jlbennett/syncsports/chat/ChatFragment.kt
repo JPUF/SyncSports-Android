@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.jlbennett.syncsports.R
 import com.jlbennett.syncsports.databinding.FragmentChatBinding
@@ -23,6 +24,8 @@ import com.jlbennett.syncsports.util.MatchTime
 import com.jlbennett.syncsports.util.State
 import com.jlbennett.syncsports.util.User
 import java.util.*
+
+
 
 
 /**
@@ -49,7 +52,15 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
      * Used for reading from local storage.
      */
     private lateinit var sharedPref: SharedPreferences
+
     private lateinit var recyclerViewAdapter: ChatMessageAdapter
+
+    /**
+     * A flag that determines if the RecyclerView of chat messages will automatically scroll or not.
+     *
+     * This is true by default, and is not true when the user has manually scrolled away from the bottom.
+     */
+    private var autoScroll: Boolean = true
 
     /**
      * The current user. Includes their name and colour.
@@ -74,7 +85,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
         val timeAdjustDialogFragment = TimeAdjustDialogFragment()
         timeAdjustDialogFragment.setTargetFragment(this, 1)
 
-        //Listen for changes in the view model's publically accesible (immutable) eventMessageToShow.
+        //Listen for changes in the view model's publicly accessible immutable) eventMessageToShow.
         viewModel.eventMessageToShow.observe(viewLifecycleOwner, Observer { hasMessageToShow ->
             //We're only interested in when the LiveData value has been changed from false to true. Not visa versa.
             if (hasMessageToShow) {
@@ -97,7 +108,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
         viewModel.matchTime.observe(viewLifecycleOwner, Observer { updatingMatchTime ->
             val timeString = updatingMatchTime.readableString()
             val stateString = when (updatingMatchTime.state) {
-                State.PRE_MATCH -> "Pre-Match"
+                State.PRE_MATCH -> "Pre Match"
                 State.FIRST_HALF -> "1st Half"
                 State.HALF_TIME -> "Half Time"
                 State.SECOND_HALF -> "2nd Half"
@@ -126,15 +137,20 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
 
         binding.chatMessageList.adapter = recyclerViewAdapter
 
+        binding.chatMessageList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                autoScroll = !recyclerView.canScrollVertically(1)
+                Log.d("ChatFragment", "autoScroll = $autoScroll")
+            }
+        })
+
         //Handle the event of the user pressing the send button.
         binding.sendButton.setOnClickListener {
             val chatMessage = binding.inputText.text
 
-            if(chatMessage.isNotBlank()) //Only process non blank messages (can't send just whitespace).
+            if (chatMessage.isNotBlank()) //Only process non blank messages (can't send just whitespace).
             {
-                //Scroll the recycler view to the bottom.
-                binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
-
                 //Reset the entry, for another message to be sent.
                 binding.inputText.setText(R.string.empty)
 
@@ -154,8 +170,7 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
             return@setOnEditorActionListener when (actionID) {
                 EditorInfo.IME_ACTION_SEND -> {
                     val chatMessage = view.text
-                    if(chatMessage.isNotBlank())
-                    {
+                    if (chatMessage.isNotBlank()) {
                         binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
                         binding.inputText.setText(R.string.empty)
                         viewModel.sendMessage(chatMessage.toString())
@@ -179,6 +194,9 @@ class ChatFragment : Fragment(), TimeAdjustDialogFragment.DialogListener, ReplyC
     private fun displayMessage(chatMessage: ChatMessage) {
         activity!!.runOnUiThread {
             recyclerViewAdapter.insertMessage(chatMessage)
+        }
+        if(autoScroll){
+            binding.chatMessageList.scrollToPosition(recyclerViewAdapter.itemCount - 1)
         }
     }
 
