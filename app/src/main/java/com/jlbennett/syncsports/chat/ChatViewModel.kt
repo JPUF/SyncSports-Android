@@ -53,7 +53,7 @@ class ChatViewModel(matchTime: MatchTime, roomName: String, user: User) : ViewMo
                     if (seconds == 0) {
                         minutes = (minutes + 1) % 60
                     }
-                }//TODO handle state here
+                }
             }
 
             //Update the quarter second count every time this runnable is called.
